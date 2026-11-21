@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ShopNest: everything you love, nested in one place. Shop electronics, fashion, groceries and more. Pay by cash or ShopNest credit.">
+  <meta name="theme-color" content="#fffaf5">
+  <title>ShopNest | Everything you love, nested in one place</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Fonts: Fraunces (headings) + Plus Jakarta Sans (text). System fonts are used if offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+
+  <!-- Order matters: theme (variables) first, then the files that use them -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/store.css">
+</head>
+<body data-layout="store" data-page="home">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Announcement bar, header and category bar are built by js/layout.js -->
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main" class="page-main">
+
+    <!-- ============ HERO (bento grid) ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-bento">
+
+        <article class="hero-main">
+          <div class="hero-main__copy">
+            <p class="hero-pill"><span class="hero-pill__tag">New</span> Fresh arrivals in every aisle</p>
+            <h1 class="hero-title" id="hero-title">
+              Everything you love, <em>nested</em> in one place.
+            </h1>
+            <p class="hero-text">
+              From gadgets to groceries, discover hand-picked products at honest prices.
+              Pay by cash or with your ShopNest credit, and get your bill instantly.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="#trending">Start shopping <span data-icon="arrowRight" data-size="18"></span></a>
+              <a class="btn btn-secondary btn-lg" href="signup.html">Create free account</a>
+            </div>
+            <dl class="hero-stats">
+              <div class="hero-stat">
+                <dt class="hero-stat__label">Products in stock</dt>
+                <dd class="hero-stat__value" id="stat-products">60</dd>
+              </div>
+              <div class="hero-stat">
+                <dt class="hero-stat__label">Categories</dt>
+                <dd class="hero-stat__value" id="stat-categories">13</dd>
+              </div>
+              <div class="hero-stat">
+                <dt class="hero-stat__label">Starter credit</dt>
+                <dd class="hero-stat__value" id="stat-credit">₹1,000</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="hero-main__media">
+            <img src="assets/images/hero/shopping.jpg" alt="A shopper holding colourful paper shopping bags" width="900" height="1000" fetchpriority="high">
+            <p class="hero-badge hero-badge--stock">
+              <span class="hero-badge__icon"><span data-icon="bolt" data-size="16"></span></span> Live stock on every item
+            </p>
+            <p class="hero-badge hero-badge--credit">
+              <span class="hero-badge__icon"><span data-icon="wallet" data-size="16"></span></span>
+              <span id="hero-credit-text">₹1,000 credit on sign-up</span>
+            </p>
+          </div>
+        </article>
+
+        <!-- Promo cards: store.js points each link to its category -->
+        <a class="promo-card" href="#categories" data-category-link="Toys & Baby">
+          <img src="assets/images/hero/gifts.jpg" alt="" width="800" height="600" loading="lazy">
+          <div class="promo-card__body">
+            <p class="promo-card__eyebrow">Gifting season</p>
+            <h2 class="promo-card__title">Little joys, big smiles</h2>
+            <span class="promo-card__cta">Shop toys &amp; gifts <span data-icon="arrowRight" data-size="14"></span></span>
+          </div>
+        </a>
+
+        <a class="promo-card" href="#categories" data-category-link="Beauty & Personal Care">
+          <img src="assets/images/hero/beauty.jpg" alt="" width="800" height="600" loading="lazy">
+          <div class="promo-card__body">
+            <p class="promo-card__eyebrow">Self-care edit</p>
+            <h2 class="promo-card__title">Glow-up essentials</h2>
+            <span class="promo-card__cta">Shop beauty <span data-icon="arrowRight" data-size="14"></span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ TRUST STRIP ============ -->
+    <section aria-label="Why shop with us">
+      <div class="container">
+        <ul class="trust-grid">
+          <li class="trust-item">
+            <span class="trust-item__icon"><span data-icon="wallet" data-size="22"></span></span>
+            <div>
+              <p class="trust-item__title">Cash or credit</p>
+              <p class="trust-item__text">Pay now, or use your credit limit</p>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="trust-item__icon"><span data-icon="bolt" data-size="22"></span></span>
+            <div>
+              <p class="trust-item__title">Live stock</p>
+              <p class="trust-item__text">Checked again before every order</p>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="trust-item__icon"><span data-icon="receipt" data-size="22"></span></span>
+            <div>
+              <p class="trust-item__title">Instant bill</p>
+              <p class="trust-item__text">A printable bill for every order</p>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="trust-item__icon"><span data-icon="shield" data-size="22"></span></span>
+            <div>
+              <p class="trust-item__title">Secure sign-in</p>
+              <p class="trust-item__text">Accounts protected by Firebase</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ CATEGORIES ============ -->
+    <section class="section" id="categories" aria-labelledby="categories-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Browse the aisles</p>
+            <h2 class="section-title" id="categories-title">Shop by category</h2>
+          </div>
+        </div>
+        <!-- Filled by js/store.js -->
+        <div class="category-grid" id="category-grid" aria-busy="true"></div>
+      </div>
+    </section>
+
+    <!-- ============ TRENDING PRODUCTS ============ -->
+    <section class="section" id="trending" aria-labelledby="trending-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Hand-picked for you</p>
+            <h2 class="section-title" id="trending-title">Trending now</h2>
+          </div>
+          <a class="section-link" href="#products">View all products <span data-icon="arrowRight" data-size="16"></span></a>
+        </div>
+        <!-- Filled by js/store.js -->
+        <div class="product-grid" id="trending-grid" aria-busy="true"></div>
+      </div>
+    </section>
+
+    <!-- ============ CREDIT BANNER ============ -->
+    <section aria-labelledby="credit-title">
+      <div class="container">
+        <div class="credit-banner">
+          <div>
+            <p class="eyebrow">ShopNest Credit</p>
+            <h2 class="credit-banner__title" id="credit-title">Pay with credit, not cash.</h2>
+            <p class="credit-banner__text">
+              Every new account starts with <strong id="banner-credit">₹1,000</strong> of ShopNest credit.
+              Choose <strong>Credit</strong> at checkout and we keep track of what you have used.
+            </p>
+            <a class="btn btn-light btn-lg" href="signup.html">Claim your credit <span data-icon="arrowRight" data-size="18"></span></a>
+          </div>
+          <!-- Decorative card drawn with CSS -->
+          <div class="credit-card" aria-hidden="true">
+            <div class="credit-card__top">
+              <span>ShopNest</span>
+              <span class="credit-card__chip"></span>
+            </div>
+            <div>
+              <p class="credit-card__label">Available credit</p>
+              <p class="credit-card__amount" id="card-credit">₹1,000.00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FULL CATALOGUE (Phase 4) ============ -->
+    <section class="section" id="products" aria-labelledby="products-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Catalogue</p>
+            <h2 class="section-title" id="products-title">All products</h2>
+          </div>
+        </div>
+        <div id="product-area"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Filled by js/layout.js -->
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <!-- jQuery from the official CDN (integrity = tamper check), local copy as fallback -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="js/jquery-fallback.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/placeholder.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/store.js"></script>
+</body>
+</html>
