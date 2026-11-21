@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create your free ShopNest account and get starter credit.">
+  <meta name="theme-color" content="#fffaf5">
+  <title>Create account | ShopNest</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body data-layout="auth" data-guard="guest" data-page="signup">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="auth-shell">
+    <main id="main" class="auth-main page-main">
+      <div class="auth-top">
+        <div id="auth-logo"></div>
+        <a class="auth-back" href="index.html"><span data-icon="chevronLeft" data-size="16"></span> Back to store</a>
+      </div>
+
+      <div class="auth-card">
+        <p class="eyebrow">Join ShopNest</p>
+        <h1 class="auth-title">Create your account</h1>
+        <p class="auth-sub">It takes under a minute, and <strong><span data-credit-amount>₹1,000</span> of credit</strong> is waiting for you.</p>
+
+        <form class="form-grid auth-form" id="signup-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="signup-name">Full name</label>
+            <input class="input" id="signup-name" name="name" type="text" autocomplete="name"
+                   placeholder="e.g. Priya Sharma" maxlength="50" required aria-describedby="signup-name-error">
+            <p class="field-error" id="signup-name-error"></p>
+          </div>
+
+          <div class="field-pair">
+            <div class="field">
+              <label class="field-label" for="signup-email">E-mail address</label>
+              <input class="input" id="signup-email" name="email" type="email" inputmode="email"
+                     autocomplete="email" placeholder="you@example.com" required aria-describedby="signup-email-error">
+              <p class="field-error" id="signup-email-error"></p>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="signup-mobile">Mobile number</label>
+              <div class="input-prefix">
+                <span class="input-prefix__text" aria-hidden="true">+91</span>
+                <input class="input" id="signup-mobile" name="mobile" type="tel" inputmode="numeric"
+                       autocomplete="tel-national" placeholder="98765 43210" maxlength="12" required
+                       aria-describedby="signup-mobile-hint signup-mobile-error">
+              </div>
+              <p class="field-hint" id="signup-mobile-hint">10 digits, India (+91)</p>
+              <p class="field-error" id="signup-mobile-error"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="signup-password">Password</label>
+            <div class="password-wrap">
+              <input class="input" id="signup-password" name="password" type="password" autocomplete="new-password"
+                     required aria-describedby="password-rules signup-password-error">
+              <button type="button" class="password-toggle" data-toggle-password aria-controls="signup-password"
+                      aria-pressed="false" aria-label="Show password"><span data-icon="eye"></span></button>
+            </div>
+            <!-- Strength bar + live checklist, updated by js/auth-pages.js -->
+            <div class="strength" id="password-strength" data-score="0" aria-hidden="true"><span class="strength__bar"></span></div>
+            <ul class="password-rules" id="password-rules" aria-label="Password rules"></ul>
+            <p class="field-error" id="signup-password-error"></p>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="signup-confirm">Confirm password</label>
+            <div class="password-wrap">
+              <input class="input" id="signup-confirm" name="confirm" type="password" autocomplete="new-password"
+                     required aria-describedby="signup-confirm-error">
+              <button type="button" class="password-toggle" data-toggle-password aria-controls="signup-confirm"
+                      aria-pressed="false" aria-label="Show password"><span data-icon="eye"></span></button>
+            </div>
+            <p class="field-error" id="signup-confirm-error"></p>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block" id="signup-submit" type="submit">
+            Create account <span data-icon="arrowRight" data-size="18"></span>
+          </button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html" id="login-link">Sign in</a></p>
+      </div>
+
+      <p class="auth-foot"><span data-icon="shield" data-size="14"></span> Accounts are created and protected by Firebase Authentication.</p>
+    </main>
+
+    <aside class="auth-visual" aria-label="What you get with ShopNest">
+      <img src="assets/images/hero/gifts.jpg" alt="" width="800" height="600">
+      <div class="auth-visual__content">
+        <p class="auth-visual__quote">Little joys, delivered from one happy nest.</p>
+        <ul class="auth-perks">
+          <li><span data-icon="wallet" data-size="18"></span> <span data-credit-amount>₹1,000</span> credit the moment you join</li>
+          <li><span data-icon="layers" data-size="18"></span> 13 aisles, 60+ hand-picked products</li>
+          <li><span data-icon="receipt" data-size="18"></span> Order history and bills in one place</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="js/jquery-fallback.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth-pages.js"></script>
+</body>
+</html>

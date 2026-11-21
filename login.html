@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sign in to your ShopNest account.">
+  <meta name="theme-color" content="#fffaf5">
+  <title>Sign in | ShopNest</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<!-- data-guard="guest": signed-in users are sent to their home page -->
+<body data-layout="auth" data-guard="guest" data-page="login">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="auth-shell">
+    <main id="main" class="auth-main page-main">
+      <div class="auth-top">
+        <div id="auth-logo"></div>
+        <a class="auth-back" href="index.html"><span data-icon="chevronLeft" data-size="16"></span> Back to store</a>
+      </div>
+
+      <div class="auth-card">
+        <p class="eyebrow">Welcome back</p>
+        <h1 class="auth-title">Sign in to ShopNest</h1>
+        <p class="auth-sub">Pick up right where you left off: your cart, your credit and your orders.</p>
+
+        <!-- novalidate: we show our own friendly messages (js/validation.js) -->
+        <form class="form-grid auth-form" id="login-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="login-email">E-mail address</label>
+            <input class="input" id="login-email" name="email" type="email" inputmode="email"
+                   autocomplete="email" placeholder="you@example.com" required aria-describedby="login-email-error">
+            <p class="field-error" id="login-email-error"></p>
+          </div>
+
+          <div class="field">
+            <div class="field-row">
+              <label class="field-label" for="login-password">Password</label>
+              <a class="field-link" href="reset-password.html" id="forgot-link">Forgot password?</a>
+            </div>
+            <div class="password-wrap">
+              <input class="input" id="login-password" name="password" type="password"
+                     autocomplete="current-password" required aria-describedby="login-password-error">
+              <button type="button" class="password-toggle" data-toggle-password aria-controls="login-password"
+                      aria-pressed="false" aria-label="Show password"><span data-icon="eye"></span></button>
+            </div>
+            <p class="field-error" id="login-password-error"></p>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block" id="login-submit" type="submit">
+            Sign in <span data-icon="arrowRight" data-size="18"></span>
+          </button>
+        </form>
+
+        <p class="auth-switch">New to ShopNest? <a href="signup.html" id="signup-link">Create a free account</a></p>
+      </div>
+
+      <p class="auth-foot"><span data-icon="shield" data-size="14"></span> Your password is checked securely by Firebase Authentication.</p>
+    </main>
+
+    <!-- Decorative photo panel (hidden on small screens) -->
+    <aside class="auth-visual" aria-label="Why shop with ShopNest">
+      <img src="assets/images/hero/shopping.jpg" alt="" width="900" height="1000">
+      <div class="auth-visual__content">
+        <p class="auth-visual__quote">Everything you love, nested in one place.</p>
+        <ul class="auth-perks">
+          <li><span data-icon="wallet" data-size="18"></span> <span data-credit-amount>₹1,000</span> starter credit</li>
+          <li><span data-icon="bolt" data-size="18"></span> Live stock on every item</li>
+          <li><span data-icon="receipt" data-size="18"></span> Instant digital bill</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="js/jquery-fallback.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth-pages.js"></script>
+</body>
+</html>

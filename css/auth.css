@@ -1,0 +1,279 @@
+/* =====================================================================
+   auth.css - Sign in, Sign up and Reset password pages.
+   Split screen: the form on the left, a photo panel on the right
+   (the photo panel is hidden on small screens).
+   ===================================================================== */
+
+.auth-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* =========================== FORM SIDE =========================== */
+.auth-main {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) clamp(1.25rem, 5vw, 4rem);
+}
+
+.auth-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-soft);
+  text-decoration: none;
+}
+
+.auth-back:hover {
+  color: var(--color-primary);
+}
+
+.auth-card {
+  width: min(460px, 100%);
+  margin: auto;
+  padding-block: var(--space-10);
+}
+
+.auth-title {
+  margin-top: var(--space-2);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+}
+
+.auth-title:focus {
+  outline: none;
+}
+
+.auth-sub {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.auth-form {
+  margin-top: var(--space-8);
+}
+
+.auth-switch {
+  margin-top: var(--space-6);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.auth-switch a {
+  font-weight: var(--fw-bold);
+}
+
+.auth-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Round icon above the reset-password title. */
+.auth-icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.auth-icon--success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.auth-success__actions {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* =========================== FORM PIECES =========================== */
+
+/* Password box with the show/hide eye button inside it. */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap .input {
+  padding-right: 3.25rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+
+.password-toggle:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+/* ---------- Password strength bar ---------- */
+.strength {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-muted-bg);
+}
+
+.strength__bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--color-danger);
+  transition: width var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+
+/* data-score (0-5) is set by auth-pages.js: one step per rule met. */
+.strength[data-score="1"] .strength__bar { width: 20%; }
+.strength[data-score="2"] .strength__bar { width: 40%; }
+.strength[data-score="3"] .strength__bar { width: 60%; background: var(--color-highlight); }
+.strength[data-score="4"] .strength__bar { width: 80%; background: var(--color-highlight); }
+.strength[data-score="5"] .strength__bar { width: 100%; background: var(--color-accent); }
+
+/* ---------- Password checklist ---------- */
+.password-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1) var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.password-rules li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.password-rules li .icon {
+  color: var(--color-border-strong);
+  transition: color var(--dur) var(--ease-out), transform var(--dur) var(--ease-spring);
+}
+
+.password-rules li.is-met {
+  color: var(--color-success);
+}
+
+.password-rules li.is-met .icon {
+  color: var(--color-accent);
+  transform: scale(1.15);
+}
+
+/* =========================== PHOTO SIDE =========================== */
+.auth-visual {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: flex-end;
+  height: calc(100vh - 2 * var(--space-4));
+  margin: var(--space-4);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  color: var(--color-text-inverse);
+  isolation: isolate;
+}
+
+.auth-visual img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darker bottom so the white text is readable. */
+.auth-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gradient-photo-shade);
+}
+
+.auth-visual__content {
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.auth-visual__quote {
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: 1.12;
+}
+
+.auth-perks {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  margin-top: var(--space-8);
+}
+
+.auth-perks li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 14px;
+  border: 1px solid var(--white-a35);
+  border-radius: var(--radius-pill);
+  background: var(--white-a20);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* =========================== RESPONSIVE =========================== */
+@media (max-width: 960px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-visual {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .password-rules {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card {
+    padding-block: var(--space-8);
+  }
+}
