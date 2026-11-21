@@ -106,14 +106,17 @@ const Placeholder = (function () {
    * loading="lazy" tells the browser to download photos only when they
    * scroll into view, so long product lists stay fast.
    */
-  function image(product, { size = 'md' } = {}) {
+  function image(product, { size = 'md', eager = false } = {}) {
     const src = resolveUrl(product.imageUrl);
     if (!src) {
       return art(product, { size });
     }
+    // The main photo on a product page is at the top of the screen: load it
+    // at once. Photos further down are lazy (loaded when they scroll into view).
+    const loading = eager ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
     return `
       <div class="product-photo product-photo--${size}" data-title="${Ui.escapeHtml(product.title)}" data-category="${Ui.escapeHtml(product.categoryName || '')}" data-size="${size}">
-        <img src="${Ui.escapeHtml(src)}" alt="${Ui.escapeHtml(product.title)}" loading="lazy" decoding="async" width="600" height="600">
+        <img src="${Ui.escapeHtml(src)}" alt="${Ui.escapeHtml(product.title)}" ${loading} decoding="async" width="600" height="600">
       </div>`;
   }
 

@@ -702,13 +702,36 @@ const Api = (function () {
     return deleteDoc('inventory', id);
   }
 
+  /* ---------- Store catalogue (customers) ---------- */
+
+  // The store needs the active products in several places (trending row,
+  // catalogue, related items). We keep the Promise of the first request, so
+  // the server is asked only ONCE per page load.
+  let activeProductsPromise = null;
+
+  /**
+   * EVERY active product, in one request (runQuery isActive == true).
+   * An equality filter alone needs no composite index. The store then filters,
+   * searches, sorts and paginates these in JavaScript, which is fast for a
+   * catalogue of a few hundred items and allows "contains" search.
+   */
+  function getActiveProducts(forceReload = false) {
+    if (!activeProductsPromise || forceReload) {
+      activeProductsPromise = runQuery(Query.build({
+        from: 'inventory',
+        where: Query.where('isActive', '==', true)
+      })).catch((error) => {
+        activeProductsPromise = null; // allow a retry after a failure
+        throw error;
+      });
+    }
+    return activeProductsPromise;
+  }
+
   /** A few active products for the home page "Trending now" row. */
   async function getFeaturedProducts(limit = 8) {
-    return runQuery(Query.build({
-      from: 'inventory',
-      where: Query.where('isActive', '==', true),
-      limit
-    }));
+    const all = await getActiveProducts();
+    return all.slice(0, limit);
   }
 
   // Public API of this module
@@ -750,6 +773,7 @@ const Api = (function () {
     updateCreditLimit,
     // catalogue
     getCategories,
+    getActiveProducts,
     getFeaturedProducts,
     // inventory (admin)
     getProduct,
