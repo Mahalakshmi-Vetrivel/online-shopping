@@ -90,6 +90,14 @@
   --color-sidebar-active: var(--white);
   --color-admin-bg:       #f7f0ea;
 
+  /* Chart colours. Series A = brand terracotta, series B = steel blue. The pair was checked
+     with the dataviz palette validator: colour-blind separation (protan) delta-E 20 (needs 8+),
+     normal vision 27, contrast against the page 3:1+. Bars also carry text labels,
+     so colour is never the only way to tell them apart. */
+  --chart-a: var(--terracotta-600);
+  --chart-b: #2f6fb5;
+  --chart-track: var(--color-muted-bg);
+
   /* Logo gradient */
   --logo-a: var(--coral-400);
   --logo-b: var(--coral-500);

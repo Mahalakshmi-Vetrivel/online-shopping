@@ -441,6 +441,58 @@ const Ui = (function () {
   }
 
   /* ------------------------------------------------------------------
+     Bar chart + CSV download (used by the dashboard and the reports)
+     ------------------------------------------------------------------ */
+
+  /**
+   * A horizontal bar chart: one thin bar per item.
+   *   items: [{ label, value, text, tone }]   text = what is written at the end of the bar
+   *   tone : 'a' (terracotta, default) or 'b' (blue), see --chart-a / --chart-b in theme.css
+   * The bar is a <progress> element, so screen readers announce "label: value" through
+   * aria-label, and hovering a row shows the same text as a tooltip (title).
+   */
+  function barChart({ title, items, note = '' }) {
+    if (!items || !items.length) return '';
+    const max = Math.max(...items.map((item) => item.value), 0) || 1;
+    const rows = items.map((item) => `
+      <li class="bar-chart__row" title="${escapeHtml(item.label)}: ${escapeHtml(item.text)}">
+        <span class="bar-chart__label">${escapeHtml(item.label)}</span>
+        <progress class="bar-chart__bar ${item.tone === 'b' ? 'bar-chart__bar--b' : ''}" max="${max}" value="${Math.max(item.value, 0)}"
+                  aria-label="${escapeHtml(item.label)}: ${escapeHtml(item.text)}"></progress>
+        <span class="bar-chart__value">${escapeHtml(item.text)}</span>
+      </li>`).join('');
+    return `
+      <figure class="bar-chart">
+        <figcaption class="bar-chart__title">${escapeHtml(title)}</figcaption>
+        <ul class="bar-chart__list">${rows}</ul>
+        ${note ? `<p class="bar-chart__note">${escapeHtml(note)}</p>` : ''}
+      </figure>`;
+  }
+
+  /**
+   * Saves a table as a .csv file the browser downloads (no server involved).
+   *   headers: ['Name', 'Qty']      rows: [['Pen', 3], ...]
+   * Values with commas or quotes are wrapped in quotes ("" for a quote inside).
+   * The file starts with a BOM (\uFEFF) so Excel reads UTF-8 correctly (the rupee sign, names).
+   */
+  function downloadCsv(filename, headers, rows) {
+    const cell = (value) => {
+      const text = value === null || value === undefined ? '' : String(value);
+      return /[",\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+    };
+    const lines = [headers, ...rows].map((row) => row.map(cell).join(','));
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  /* ------------------------------------------------------------------
      Empty state + badges
      ------------------------------------------------------------------ */
 
@@ -478,6 +530,8 @@ const Ui = (function () {
     skeletonRows,
     skeletonChips,
     loader,
+    barChart,
+    downloadCsv,
     renderPagination,
     createTokenPager,
     emptyState,

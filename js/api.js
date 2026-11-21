@@ -655,6 +655,42 @@ const Api = (function () {
     return orderId;
   }
 
+  /* ---------- Reports (admin) ---------- */
+
+  /**
+   * Postman 5.5: every order created between two moments (inclusive).
+   * A range on ONE field (createdAt) needs no composite index. Cash / credit
+   * and customers are separated afterwards in JavaScript (see reports-calc.js).
+   */
+  function getOrdersBetween(from, to) {
+    return runQuery(Query.build({
+      from: 'orders',
+      where: Query.and(Query.where('createdAt', '>=', from), Query.where('createdAt', '<=', to)),
+      orderBy: Query.orderBy('createdAt', 'desc')
+    }));
+  }
+
+  /** Every order ever placed, newest first (dashboard totals). */
+  async function getAllOrders() {
+    const orders = await listAll('orders', 'createdAt');
+    return orders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  }
+
+  /** Every product, active or hidden, A to Z (inventory reports). */
+  function listAllProducts() {
+    return listAll('inventory', 'title');
+  }
+
+  /** The products with the least stock first (qty < LOW_STOCK). One range + the same field in orderBy = no index needed. */
+  function lowStockProducts(limit = 5) {
+    return runQuery(Query.build({
+      from: 'inventory',
+      where: Query.where('qty', '<', CONFIG.LOW_STOCK),
+      orderBy: Query.orderBy('qty'),
+      limit
+    }));
+  }
+
   /* ---------- Customers (admin) ---------- */
 
   /** Postman 4.3: one page of customers, A to Z by name, using pageToken. */
@@ -850,6 +886,11 @@ const Api = (function () {
     getOrder,
     getCustomerOrders,
     placeOrder,
+    // reports (admin)
+    getOrdersBetween,
+    getAllOrders,
+    listAllProducts,
+    lowStockProducts,
     // inventory (admin)
     getProduct,
     listProducts,
