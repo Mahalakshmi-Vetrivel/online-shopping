@@ -1,0 +1,1240 @@
+/* =====================================================================
+   components.css - reusable building blocks used on every page:
+   logo, buttons, spinner, form fields, cards, badges, chips,
+   product image placeholder, skeleton loaders, pagination,
+   empty state, toast notifications and modal dialogs.
+   ===================================================================== */
+
+/* =========================== LOGO =========================== */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.logo:hover {
+  color: var(--color-text);
+}
+
+.logo-mark {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 6px 12px var(--color-glow));
+  transition: transform var(--dur) var(--ease-spring);
+}
+
+.logo:hover .logo-mark {
+  transform: rotate(-8deg) scale(1.06);
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+}
+
+.logo-text span {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Colours inside the SVG logo come from the theme. */
+.logo-stop-a { stop-color: var(--logo-a); }
+.logo-stop-b { stop-color: var(--logo-b); }
+.logo-stop-c { stop-color: var(--logo-c); }
+.logo-bag    { fill: var(--white); }
+.logo-weave  { stroke: var(--color-primary); }
+.logo-handle { stroke: var(--white); }
+.logo-egg    { fill: var(--color-highlight); }
+
+.logo--light .logo-text {
+  color: var(--white);
+}
+
+/* =========================== BUTTONS =========================== */
+.btn {
+  --btn-pad-y: 0.72rem;
+  --btn-pad-x: 1.25rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--btn-pad-y) var(--btn-pad-x);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out);
+}
+
+.btn:active:not([disabled]) {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Primary: rich gradient, white text, soft glow. */
+.btn-primary {
+  background: var(--gradient-button);
+  background-size: 160% 100%;
+  background-position: 0% 50%;
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover:not([disabled]) {
+  background-position: 100% 50%;
+  color: var(--color-text-inverse);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-secondary:hover:not([disabled]) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-soft);
+}
+
+.btn-ghost:hover:not([disabled]) {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+.btn-accent:hover:not([disabled]) {
+  background: var(--color-accent-strong);
+  color: var(--color-text-inverse);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+.btn-danger:hover:not([disabled]) {
+  background: var(--color-danger-hover);
+  color: var(--color-text-inverse);
+}
+
+.btn-light {
+  background: var(--white);
+  color: var(--color-primary);
+}
+
+.btn-light:hover:not([disabled]) {
+  color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  --btn-pad-y: 0.45rem;
+  --btn-pad-x: 0.9rem;
+  font-size: var(--fs-xs);
+}
+
+.btn-lg {
+  --btn-pad-y: 0.95rem;
+  --btn-pad-x: 1.75rem;
+  font-size: var(--fs-base);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Round icon-only button (cart, close, menu ...). Needs an aria-label. */
+.btn-icon {
+  --btn-pad-y: 0;
+  --btn-pad-x: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+}
+
+/* Busy state (set by Ui.setBusy): text fades, spinner shows. */
+.btn.is-busy {
+  pointer-events: none;
+}
+
+/* =========================== SPINNER =========================== */
+.spinner {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-lg {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 3px;
+  color: var(--color-primary);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================== FORMS =========================== */
+.form-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.field {
+  display: grid;
+  align-content: start; /* side-by-side fields stay top-aligned even if one has a hint */
+  gap: var(--space-2);
+}
+
+.field-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-soft);
+}
+
+.field-label .required {
+  color: var(--color-danger);
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
+}
+
+textarea.input {
+  min-height: 110px;
+  resize: vertical;
+}
+
+select.input {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.input.is-invalid {
+  border-color: var(--color-danger);
+}
+
+.input.is-invalid:focus {
+  box-shadow: 0 0 0 4px var(--color-danger-soft);
+}
+
+.field-hint {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-danger);
+}
+
+.field-error:empty {
+  display: none;
+}
+
+/* Input with an icon on the left (e.g. search). */
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap > .icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.input-wrap > .input {
+  padding-left: 2.75rem;
+}
+
+/* Two fields side by side (they stack on phones). */
+.field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5) var(--space-4);
+}
+
+/* A fixed prefix inside an input: "+91" for mobiles, "₹" for prices. */
+.input-prefix {
+  position: relative;
+}
+
+.input-prefix__text {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-prefix .input {
+  padding-left: 3.1rem;
+}
+
+/* Label on the left, a link on the right ("Forgot password?"). */
+.field-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.field-link {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+/* Small counter next to a textarea label ("120 / 500"). */
+.char-count {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+  .field-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================== SWITCH (on / off) ===========================
+   Two versions share these styles:
+   1. <button role="switch" aria-checked="true">  (table rows: click = save)
+   2. <label class="switch"><input type="checkbox" class="switch__input"> (forms) */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-soft);
+  cursor: pointer;
+}
+
+.switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+  transition: background-color var(--dur) var(--ease-out);
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease-spring);
+}
+
+/* ON state, for both versions */
+.switch[aria-checked="true"] .switch__track,
+.switch__input:checked + .switch__track {
+  background: var(--color-accent);
+}
+
+.switch[aria-checked="true"] .switch__thumb,
+.switch__input:checked + .switch__track .switch__thumb {
+  transform: translateX(16px);
+}
+
+.switch[aria-checked="true"] .switch__text {
+  color: var(--color-accent-strong);
+}
+
+.switch__input:focus-visible + .switch__track {
+  box-shadow: var(--shadow-focus);
+}
+
+.switch.is-busy {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.switch--field {
+  justify-self: start;
+  min-height: 48px;
+}
+
+/* =========================== CARDS =========================== */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-pad {
+  padding: var(--space-6);
+}
+
+.card-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+/* Round avatar with the user's first letter (store header + admin sidebar). */
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-button);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+}
+
+/* =========================== BADGES =========================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.25em 0.7em;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* The small coloured dot before the badge text. */
+.badge-dot::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-success { background: var(--color-success-soft); color: var(--color-success); }
+.badge-warning { background: var(--color-warning-soft); color: var(--color-warning); }
+.badge-danger  { background: var(--color-danger-soft);  color: var(--color-danger-hover); }
+.badge-info    { background: var(--color-info-soft);    color: var(--color-info); }
+.badge-accent  { background: var(--color-accent-soft);  color: var(--color-accent-strong); }
+.badge-muted   { background: var(--color-muted-bg);            color: var(--color-text-soft); }
+
+/* =========================== CHIPS (filters) =========================== */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0.45rem 1rem 0.45rem 0.55rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text-soft);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transition: all var(--dur) var(--ease-out);
+}
+
+.chip-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--tone-a), var(--tone-b));
+  color: var(--white);
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.chip.is-active,
+.chip[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--gradient-button);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-glow);
+}
+
+/* =========================== CATEGORY TONES =========================== */
+/* placeholder.js adds .tone-N; these map N to the colours in theme.css. */
+.tone-0  { --tone-a: var(--cat-0-a);  --tone-b: var(--cat-0-b); }
+.tone-1  { --tone-a: var(--cat-1-a);  --tone-b: var(--cat-1-b); }
+.tone-2  { --tone-a: var(--cat-2-a);  --tone-b: var(--cat-2-b); }
+.tone-3  { --tone-a: var(--cat-3-a);  --tone-b: var(--cat-3-b); }
+.tone-4  { --tone-a: var(--cat-4-a);  --tone-b: var(--cat-4-b); }
+.tone-5  { --tone-a: var(--cat-5-a);  --tone-b: var(--cat-5-b); }
+.tone-6  { --tone-a: var(--cat-6-a);  --tone-b: var(--cat-6-b); }
+.tone-7  { --tone-a: var(--cat-7-a);  --tone-b: var(--cat-7-b); }
+.tone-8  { --tone-a: var(--cat-8-a);  --tone-b: var(--cat-8-b); }
+.tone-9  { --tone-a: var(--cat-9-a);  --tone-b: var(--cat-9-b); }
+.tone-10 { --tone-a: var(--cat-10-a); --tone-b: var(--cat-10-b); }
+.tone-11 { --tone-a: var(--cat-11-a); --tone-b: var(--cat-11-b); }
+.tone-12 { --tone-a: var(--cat-12-a); --tone-b: var(--cat-12-b); }
+.tone-13 { --tone-a: var(--cat-13-a); --tone-b: var(--cat-13-b); }
+
+/* =========================== PRODUCT IMAGE PLACEHOLDER =========================== */
+/* A category-coloured gradient "photo" with a big faded icon and the
+   product initials on a frosted-glass tile. Built by placeholder.js. */
+.product-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--tone-a), var(--tone-b));
+  color: var(--white);
+}
+
+/* Two soft light blobs give the gradient depth. */
+.product-art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 12%, var(--white-a35), transparent 42%),
+    radial-gradient(circle at 92% 95%, var(--white-a20), transparent 48%);
+}
+
+/* Subtle dotted texture. */
+.product-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(var(--white-a20) 1px, transparent 1px);
+  background-size: 14px 14px;
+  mask-image: linear-gradient(160deg, black, transparent 70%);
+  -webkit-mask-image: linear-gradient(160deg, black, transparent 70%);
+}
+
+.product-art__watermark {
+  display: block;
+  position: absolute;
+  right: -10%;
+  bottom: -16%;
+  width: 64%;
+  height: auto;
+  opacity: 0.2;
+  transform: rotate(-14deg);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.product-art__watermark svg {
+  width: 100%;
+  height: auto;
+}
+
+.product-art__initials {
+  padding: 0.3em 0.55em;
+  border: 1px solid var(--white-a35);
+  border-radius: var(--radius-md);
+  background: var(--white-a20);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+  font-weight: var(--fw-black);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  box-shadow: 0 10px 30px -10px var(--ink-a20);
+}
+
+.product-art__badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--white-a20);
+  border: 1px solid var(--white-a35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Larger version for the product details page. */
+.product-art--lg {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-xl);
+}
+
+.product-art--lg .product-art__initials {
+  font-size: clamp(2.6rem, 2rem + 4vw, 4.5rem);
+}
+
+/* Tiny square version for table rows and cart lines. */
+.product-art--thumb {
+  width: 44px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+}
+
+.product-art--thumb .product-art__badge,
+.product-art--thumb .product-art__watermark {
+  display: none;
+}
+
+.product-art--thumb .product-art__initials {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  font-size: var(--fs-sm);
+  letter-spacing: 0;
+}
+
+/* =========================== PRODUCT PHOTO =========================== */
+/* Real photo in a square frame with a warm background while it loads. */
+.product-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-muted-bg);
+}
+
+.product-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.product-photo--lg {
+  border-radius: var(--radius-xl);
+}
+
+.product-photo--thumb {
+  width: 44px;
+  border-radius: var(--radius-sm);
+}
+
+/* The generated picture is square too when it replaces a photo. */
+.product-art--md {
+  aspect-ratio: 1 / 1;
+}
+
+/* =========================== PRODUCT CARD =========================== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
+.product-card__media {
+  position: relative;
+  padding: var(--space-3) var(--space-3) 0;
+}
+
+.product-card:hover .product-photo img {
+  transform: scale(1.06);
+}
+
+/* Small label on the photo, e.g. "Only 8 left". */
+.product-card__flag {
+  position: absolute;
+  top: var(--space-5);
+  left: var(--space-5);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--white-a90);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-primary-hover);
+}
+
+.product-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-4) var(--space-4);
+}
+
+.product-card__cat {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.product-card__title {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0;
+  line-height: var(--lh-snug);
+}
+
+.product-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+.product-card__price {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .product-card__body {
+    padding: var(--space-3);
+  }
+
+  .product-card__foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* =========================== SKELETON LOADERS =========================== */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--color-muted-bg);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-sheen);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-line {
+  height: 0.9rem;
+  margin-top: var(--space-2);
+}
+
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-80 { width: 80%; }
+
+.skeleton-art {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-chip {
+  width: 120px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+}
+
+.skeleton-card {
+  padding: var(--space-3);
+}
+
+.skeleton-tile {
+  height: 150px;
+  border-radius: var(--radius-lg);
+}
+
+/* =========================== DATA TABLES =========================== */
+/* Tables scroll sideways on small screens instead of breaking the layout. */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Cells that may wrap onto two lines (e.g. long category names). */
+.data-table .cell-wrap {
+  min-width: 120px;
+  white-space: normal;
+}
+
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-surface-alt);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.data-table tbody tr {
+  border-top: 1px solid var(--color-border);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.data-table tbody tr:hover {
+  background: var(--color-surface-alt);
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Product name + thumbnail inside a table cell. */
+.cell-product {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: var(--fw-semibold);
+}
+
+/* =========================== CODE BLOCKS =========================== */
+.code-block {
+  margin: 0;
+  padding: var(--space-4);
+  max-height: 280px;
+  overflow: auto;
+  border-radius: var(--radius-md);
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+}
+
+/* =========================== PAGINATION =========================== */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.pagination-info {
+  min-width: 7rem;
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+/* =========================== EMPTY STATE =========================== */
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+}
+
+.empty-state__art {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: var(--space-2);
+  border-radius: 32px;
+  background: var(--gradient-soft);
+  color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary-soft);
+  animation: float 4s ease-in-out infinite;
+}
+
+.empty-state__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+.empty-state__text {
+  max-width: 42ch;
+  color: var(--color-text-muted);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* =========================== TOASTS =========================== */
+.toast-region {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-toast);
+  display: grid;
+  gap: var(--space-3);
+  width: min(380px, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.toast {
+  --toast-color: var(--color-info);
+  --toast-soft: var(--color-info-soft);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  animation: toast-in var(--dur-slow) var(--ease-spring) both;
+}
+
+.toast.is-leaving {
+  animation: toast-out var(--dur) var(--ease-out) both;
+}
+
+.toast--success { --toast-color: var(--color-success); --toast-soft: var(--color-success-soft); }
+.toast--error   { --toast-color: var(--color-danger);  --toast-soft: var(--color-danger-soft); }
+.toast--warning { --toast-color: var(--color-warning); --toast-soft: var(--color-warning-soft); }
+
+.toast__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--toast-soft);
+  color: var(--toast-color);
+}
+
+.toast__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.toast__message {
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+  word-break: break-word;
+}
+
+.toast__close {
+  width: 32px;
+  height: 32px;
+  margin: -4px -4px 0 0;
+}
+
+/* The bar at the bottom that shrinks while the toast is visible. */
+.toast__timer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--toast-color);
+  transform-origin: left;
+  animation: toast-timer 4.5s linear forwards; /* keep in sync with TOAST_MS in ui.js */
+}
+
+.toast--error .toast__timer {
+  animation-duration: 7s;
+}
+
+/* Hovering a toast pauses its countdown (ui.js pauses the real timer too). */
+.toast:hover .toast__timer,
+.toast:focus-within .toast__timer {
+  animation-play-state: paused;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(40px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes toast-out {
+  to { opacity: 0; transform: translateX(40px); }
+}
+
+@keyframes toast-timer {
+  to { transform: scaleX(0); }
+}
+
+/* =========================== MODAL =========================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: var(--color-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fade-in var(--dur) var(--ease-out) both;
+}
+
+.modal-backdrop.is-leaving {
+  animation: fade-out var(--dur) var(--ease-out) both;
+}
+
+.modal {
+  width: min(520px, 100%);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  animation: modal-in var(--dur-slow) var(--ease-spring) both;
+}
+
+.modal--sm {
+  width: min(420px, 100%);
+}
+
+.modal--lg {
+  width: min(720px, 100%);
+}
+
+.modal--xl {
+  width: min(980px, 100%);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) 0;
+}
+
+.modal-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+.modal-body {
+  padding: var(--space-5) var(--space-6);
+  color: var(--color-text-soft);
+}
+
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+/* Confirm dialog: big icon centred on top. */
+.confirm {
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  text-align: center;
+}
+
+.confirm__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  background: var(--color-info-soft);
+  color: var(--color-info);
+}
+
+.confirm--danger .confirm__icon {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.confirm__text {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.confirm__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* Stops the page behind a modal from scrolling. */
+body.no-scroll {
+  overflow: hidden;
+}
+
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { to { opacity: 0; } }
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================== LOADER (full block) =========================== */
+.loader {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* =========================== SMALL SCREENS =========================== */
+@media (max-width: 600px) {
+  .toast-region {
+    top: auto;
+    bottom: var(--space-4);
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
