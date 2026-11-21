@@ -584,6 +584,77 @@ const Api = (function () {
     }, uid);
   }
 
+  /* ---------- Orders ---------- */
+
+  /** Postman 5.3: one order (used by the bill page). */
+  function getOrder(id) {
+    return getDoc('orders', id);
+  }
+
+  /**
+   * Postman 5.4: every order of one customer, newest first.
+   * "customerId ==" alone needs no composite index. We sort by date in
+   * JavaScript instead of asking Firestore to (that would need an index).
+   */
+  async function getCustomerOrders(customerId) {
+    const orders = await runQuery(Query.build({
+      from: 'orders',
+      where: Query.where('customerId', '==', customerId)
+    }));
+    return orders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  }
+
+  /**
+   * Postman 5.1 / 5.2: place an order. ONE :commit request, so the writes
+   * succeed or fail TOGETHER (atomic): either the order exists AND the stock
+   * is reduced (AND credit used is increased), or nothing changes at all.
+   *
+   *   order            { customerId, customerName, customerEmail, items[], totalAmount, paymentType }
+   *   productVersions  { productId: updateTime }  the version of each product we checked
+   *   customerVersion  updateTime of the customer document we checked (credit only)
+   *
+   * currentDocument.updateTime is a PRECONDITION: "only do this write if the
+   * document has not changed since I read it". If someone else bought the same
+   * product in the meantime, Firestore rejects the WHOLE commit, so stock can
+   * never go below zero and credit can never be overspent.
+   */
+  async function placeOrder({ order, productVersions, customerVersion }) {
+    const orderId = 'ORD' + Date.now();
+    const writes = [{
+      update: {
+        name: docName('orders', orderId),
+        fields: toFirestore({ ...order, status: 'PLACED' }).fields
+      },
+      // createdAt is stamped by the SERVER, so a wrong clock on the shopper's computer cannot fake it.
+      updateTransforms: [{ fieldPath: 'createdAt', setToServerValue: 'REQUEST_TIME' }],
+      currentDocument: { exists: false } // never overwrite an existing order
+    }];
+
+    order.items.forEach((item) => {
+      writes.push({
+        transform: {
+          document: docName('inventory', item.productId),
+          // increment by a NEGATIVE number = subtract. Done by the server, so it is race-safe.
+          fieldTransforms: [{ fieldPath: 'qty', increment: { integerValue: String(-item.qty) } }]
+        },
+        currentDocument: { updateTime: productVersions[item.productId] }
+      });
+    });
+
+    if (order.paymentType === 'credit') {
+      writes.push({
+        transform: {
+          document: docName('customers', order.customerId),
+          fieldTransforms: [{ fieldPath: 'creditUsed', increment: { doubleValue: order.totalAmount } }]
+        },
+        currentDocument: { updateTime: customerVersion }
+      });
+    }
+
+    await commit(writes);
+    return orderId;
+  }
+
   /* ---------- Customers (admin) ---------- */
 
   /** Postman 4.3: one page of customers, A to Z by name, using pageToken. */
@@ -775,6 +846,10 @@ const Api = (function () {
     getCategories,
     getActiveProducts,
     getFeaturedProducts,
+    // orders
+    getOrder,
+    getCustomerOrders,
+    placeOrder,
     // inventory (admin)
     getProduct,
     listProducts,
