@@ -258,11 +258,6 @@ const Layout = (function () {
     $nav.on('click', 'a', () => {
       if ($nav.hasClass('is-open')) $toggle.trigger('click');
     });
-
-    // The cart drawer arrives in Phase 5. Until then the button explains itself.
-    $('#cart-button').on('click', () => {
-      Ui.toast('Your cart is empty. Start adding products you love!', 'info', { title: 'Your cart' });
-    });
   }
 
   /* ------------------------------------------------------------------

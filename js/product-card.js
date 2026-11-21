@@ -5,7 +5,8 @@
    Each card is ONE link to product.html?id=... The link's ::after covers
    the whole card (see components.css), so the whole card is clickable
    while keyboard users still get a single, clearly named link.
-   The "Add" button sits above that link, so it works on its own.
+   The "Add" button sits above that link, so it works on its own
+   (js/cart.js listens for clicks on [data-add-to-cart]).
    ===================================================================== */
 
 const ProductCard = (function () {
@@ -53,12 +54,6 @@ const ProductCard = (function () {
         </div>
       </article>`;
   }
-
-  // The cart is built in Phase 5 (js/cart.js takes over this click).
-  // Until then every "Add" button explains itself.
-  $(document).on('click', '[data-add-to-cart]', () => {
-    Ui.toast('The cart opens in Phase 5. This product will be ready for you!', 'info', { title: 'Coming soon' });
-  });
 
   return { html, availability, productUrl };
 })();
