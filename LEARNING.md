@@ -322,9 +322,68 @@ New sections are added at the end of every phase.
 
 ---
 
+## Phase 5: Cart, checkout, bill and order history
+
+### 45. What the cart stores
+- `localStorage` key `shopnest.cart.<uid>` holds only `[{ id, qty }]`. Titles, prices and photos are looked up
+  from the **live** product list each time, so an old price can never be charged.
+- Before sign-in the cart lives under `shopnest.cart.guest`. After sign-in `mergeGuestCart()` adds it to the
+  customer's cart (same product: quantities add up). The `storage` event keeps several tabs in step.
+- Anything read back is validated (`Number.isInteger(qty)`, ids are strings), because anyone can edit localStorage.
+- The cart announces changes with a custom jQuery event, `$(document).trigger('cart:changed')`. The header badge,
+  the drawer and the checkout page all listen to it, so they never get out of step.
+
+### 46. The slide-in drawer
+- `role="dialog" aria-modal="true"` + `aria-labelledby`, Esc to close, Tab kept inside (focus trap).
+- Opening: remove the `hidden` attribute, wait **two animation frames** (`requestAnimationFrame` twice), then add
+  `.is-open`. The browser must first draw the hidden state, otherwise the CSS transition has nothing to animate from.
+- The drawer never lets the cart hold more than the stock, and shows "That is all we have in stock".
+
+### 47. Atomic commit (the heart of checkout)
+One `POST :commit` carries several **writes** that succeed or fail **together**:
+1. create `orders/ORD<time>` (precondition `exists: false`, so an order is never overwritten);
+2. for each product, a `transform` with `increment: -qty` (the **server** subtracts, so it is race-safe);
+3. for credit orders, a `transform` on the customer with `increment: +total` on `creditUsed`.
+- `createdAt` uses `setToServerValue: REQUEST_TIME`: the server's clock, not the shopper's.
+- **Test proof:** a rejected purchase leaves no order, no stock change and no credit change.
+
+### 48. Preconditions: stopping two shoppers buying the last item
+- Each write carries `currentDocument: { updateTime }`: "do this only if the document is still exactly the
+  version I looked at". If anything changed in between, Firestore rejects the **whole** commit with
+  `FAILED_PRECONDITION`, and we say "stock or credit changed, nothing was charged".
+- This is called **optimistic concurrency**: assume nobody interferes, but verify at the moment of writing.
+  Tested: a purchase built on an outdated product version, or an outdated customer version, is refused.
+
+### 49. Checking three times
+1. **On opening checkout:** products and credit are read fresh. Sold-out or hidden items are removed and
+   quantities are lowered, with a message (`reconcile()`).
+2. **On pressing "Place order":** read fresh again. If stock, price or credit changed since the page was drawn,
+   nothing is charged and the customer reviews the change first. (Tested: stock drops to 1, credit limit lowered,
+   price raised, item hidden.)
+3. **At the server:** the preconditions in concept 48.
+
+### 50. The credit rule and money
+- Credit is allowed only if `creditUsed + order total <= creditLimit`. The credit option is disabled otherwise,
+  with a plain explanation of how much is available.
+- Totals are rounded with `Math.round(x * 100) / 100` (concept 37), and `price`/`lineTotal` are saved as doubles,
+  `qty` as an integer (concept 30).
+
+### 51. No duplicate orders
+- A `placing` flag stops a second run, the button is disabled with a spinner, and a `finally` block always
+  unlocks it again (unless we are leaving for the bill page). Tested: three quick clicks create exactly one order.
+
+### 52. Bill, order history and printing
+- **Order history:** `runQuery customerId == uid` needs no index; we sort by date in JavaScript (newest first)
+  and page 5 per page. Photos come from the product list, falling back to the generated picture.
+- **Bill:** a customer may open only their own bills (`order.customerId === uid`). This is a *screen* check;
+  the data itself is protected by Firestore rules in Phase 7.
+- **Printing:** `@media print` hides the header, footer, drawer and buttons, so "Print bill" prints only the bill.
+- **Hardening:** sign-in forms now use `method="post"`. If a script ever failed to load, the browser would no
+  longer put the e-mail and password into the web address.
+
+---
+
 ## Coming in later phases
-- Atomic commit, field transforms (increment) and server timestamps (Phase 5)
-- Preconditions (updateTime) to prevent overselling (Phase 5)
 - Composite indexes (Phase 4 / 6)
 - Grouping and totals for reports in JavaScript (Phase 6)
 - Firestore security rules (Phase 7)

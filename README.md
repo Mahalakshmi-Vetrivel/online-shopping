@@ -4,7 +4,7 @@ A colourful, responsive online store built with **HTML, CSS, JavaScript and jQue
 The browser talks to **Firebase** (Firestore database + Authentication) through its REST APIs,
 using **JSON over AJAX** (`$.ajax`).
 
-> Psiog IMPACT training assignment. Status: **Phase 4 (store catalogue) complete.** See [PLAN.md](PLAN.md).
+> Psiog IMPACT training assignment. Status: **Phase 5 (cart, checkout, bill, orders) complete.** See [PLAN.md](PLAN.md).
 
 ## Run it locally
 
@@ -30,7 +30,10 @@ Then open <http://localhost:5500>.
 | `/login.html` | signed-out visitors | Sign in |
 | `/signup.html` | signed-out visitors | Create account (+ customer profile with starter credit) |
 | `/reset-password.html` | everyone | Send a password-reset e-mail |
-| `/orders.html` | customers | Placeholder until Phase 5 |
+| Cart drawer | everyone | Slide-in cart on every store page (guests can fill it; it merges when they sign in) |
+| `/checkout.html` | customers | Review items, choose Cash or ShopNest credit, place the order (stock and credit checked again) |
+| `/bill.html?id=ORD...` | the customer who owns the order | Printable bill |
+| `/orders.html` | customers | Order history: newest first, Cash / Credit filter, 5 per page, credit summary |
 | `/admin/inventory.html` | admin only | Products: add, edit, activate / deactivate, delete; filter by category; search; pagination |
 | `/admin/customers.html` | admin only | Customers with credit limit / used / available; search by e-mail; edit credit limit |
 | `/admin/dashboard.html`, `reports.html` | admin only | Placeholders until Phase 6 |
@@ -44,6 +47,10 @@ Then open <http://localhost:5500>.
 Product, category and banner photos are in `assets/images/` (from Unsplash, free licence; see
 [docs/IMAGE-CREDITS.md](docs/IMAGE-CREDITS.md)). Each product's `imageUrl` field points to its photo.
 `docs/add-product-images.ps1` set this field for the 60 seeded products. It is safe to run again.
+
+## If pages load only half-way
+Python's built-in server (`python -m http.server`) can refuse connections when a page asks for many files at
+once. **VS Code Live Server does not have this problem**, so prefer it. If you use Python, refresh the page.
 
 ## Tech rules
 - No frameworks, no CSS libraries, no Firebase SDK, no build step.

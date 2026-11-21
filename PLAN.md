@@ -1,6 +1,6 @@
 # PLAN.md: ShopNest Online Shopping (Psiog IMPACT training assignment)
 
-> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done.
+> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done. Phase 5 done.
 > Sources read: the trainer's OneNote notes (json.pdf), the project brief,
 > `Docs/Online-Shopping-Firebase.postman_collection.json` (32 requests) and `Docs/seed-shop.ps1`.
 
@@ -206,6 +206,8 @@ online-shopping/
 │   ├── placeholder.js      Category colour + SVG icon + initials → product image placeholder
 │   ├── product-card.js     Product card HTML + stock wording (shared by home and product page)
 │   ├── product.js          Product details page
+│   ├── cart.js             Cart (localStorage) + slide-in drawer
+│   ├── bill.js             Bill page
 │   ├── store.js            index.html + product.html logic
 │   ├── cart.js             Cart state (localStorage) + drawer
 │   ├── checkout.js         Stock/credit re-check + atomic commit
