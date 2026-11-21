@@ -2,7 +2,7 @@
    store.css - customer store layout:
    announcement bar, header (search, actions), category bar, mobile
    menu, hero bento, trust strip, category circles, product section,
-   credit banner, footer, and the Phase 0 test bench.
+   credit banner and footer.
    ===================================================================== */
 
 /* =========================== ANNOUNCEMENT BAR =========================== */
@@ -837,67 +837,6 @@ button.header-action:hover {
   grid-column: 1 / -1;
 }
 
-/* =========================== TEST BENCH (Phase 0 only, removed in Phase 7) =========================== */
-.bench-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-6);
-}
-
-.bench-wide {
-  grid-column: 1 / -1;
-}
-
-.bench-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
-}
-
-.bench-sub {
-  margin-top: var(--space-1);
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-}
-
-.bench-status {
-  margin-bottom: var(--space-4);
-}
-
-.bench-table {
-  margin-top: var(--space-5);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-.bench-label {
-  margin: var(--space-4) 0 var(--space-2);
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-bold);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.bench-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.bench-preview {
-  margin-top: var(--space-4);
-}
-
-.bench-skeleton-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-}
-
 /* =========================== RESPONSIVE =========================== */
 @media (max-width: 1200px) {
   .category-grid {
@@ -931,10 +870,6 @@ button.header-action:hover {
 
   .footer-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .bench-grid {
-    grid-template-columns: 1fr;
   }
 }
 
