@@ -4,7 +4,7 @@ A colourful, responsive online store built with **HTML, CSS, JavaScript and jQue
 The browser talks to **Firebase** (Firestore database + Authentication) through its REST APIs,
 using **JSON over AJAX** (`$.ajax`).
 
-> Psiog IMPACT training assignment. Status: **Phase 5 (cart, checkout, bill, orders) complete.** See [PLAN.md](PLAN.md).
+> Psiog IMPACT training assignment. Status: **Phase 6 (dashboard and reports) complete.** See [PLAN.md](PLAN.md).
 
 ## Run it locally
 
@@ -36,7 +36,8 @@ Then open <http://localhost:5500>.
 | `/orders.html` | customers | Order history: newest first, Cash / Credit filter, 5 per page, credit summary |
 | `/admin/inventory.html` | admin only | Products: add, edit, activate / deactivate, delete; filter by category; search; pagination |
 | `/admin/customers.html` | admin only | Customers with credit limit / used / available; search by e-mail; edit credit limit |
-| `/admin/dashboard.html`, `reports.html` | admin only | Placeholders until Phase 6 |
+| `/admin/dashboard.html` | admin only | Key numbers (products, low stock, customers, total sales), 7-day sales chart, cash vs credit, recent orders, restock list |
+| `/admin/reports.html` | admin only | Customer, inventory and sales reports with From / To dates, charts, paging and CSV download |
 | `/test-api.html` | everyone | Developer test bench (removed in Phase 7) |
 
 ## Test accounts
@@ -51,6 +52,10 @@ Product, category and banner photos are in `assets/images/` (from Unsplash, free
 ## If pages load only half-way
 Python's built-in server (`python -m http.server`) can refuse connections when a page asks for many files at
 once. **VS Code Live Server does not have this problem**, so prefer it. If you use Python, refresh the page.
+
+## Firebase free-plan limit
+The free Spark plan allows about 50,000 document reads per day. If the app shows "The free daily limit has been
+reached", wait until the limit resets (midnight Pacific time, about 13:30 IST) and try again.
 
 ## Tech rules
 - No frameworks, no CSS libraries, no Firebase SDK, no build step.

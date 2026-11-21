@@ -383,7 +383,61 @@ One `POST :commit` carries several **writes** that succeed or fail **together**:
 
 ---
 
+## Phase 6: Dashboard and reports
+
+### 53. No GROUP BY: grouping in JavaScript
+- Firestore cannot "group by customer" or "sum per category". So a report **reads the orders of a date range**
+  (`runQuery`, `createdAt >= from AND createdAt <= to`) and groups them with a `Map`:
+  ```js
+  groups.get(order.customerId).total += order.totalAmount;
+  ```
+- All of that maths lives in `js/reports-calc.js` as plain functions (`summarise`, `byCustomer`, `byCategory`,
+  `byProduct`, `byDay`). They take arrays and return arrays, so every number can be checked by hand.
+- A range on **one** field needs no composite index. Cash / credit is separated afterwards in JavaScript.
+
+### 54. Dates and time zones
+- A "To date" must include the **whole** day: the report asks for `23:59:59.999` of that day, not midnight.
+- Days are Indian days: `new Date('2026-08-31T00:00:00+05:30')`. An order at 31 Aug **23:30 IST** is
+  `18:00 UTC` and still counts for 31 Aug; one at 1 Sep **00:30 IST** is `19:00 UTC` (still 31 Aug in UTC!) but
+  belongs to 1 Sep. The test seeds exactly these two orders to prove the boundary.
+- `Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' })` writes `yyyy-mm-dd`, the same format as `<input type="date">`.
+
+### 55. One result shape, one renderer
+- Every report is a function that returns `{ subtitle, summary, charts, columns, rows, totals }`.
+  **One** renderer draws summary cards, bar charts and a table with paging, and the **same rows** become the CSV.
+  Adding a report means writing one more function. (This is the "data in, picture out" idea.)
+- Out-of-date answers are ignored with a request counter (concept 32), so clicking two reports quickly never
+  shows the first one's data under the second one's title.
+
+### 56. Bar charts without a library
+- `Ui.barChart()` makes one `<progress>` per row (concept 36): thin, rounded, accessible (`aria-label` reads
+  "Credit: ₹22,596 (92%)"), no inline widths. A table with the same numbers sits right below every chart.
+- **Colour rules** (from a charting guide): one hue for one measure; two colours only when two things are compared
+  (Cash vs Credit); colours checked for colour-blind readers. Terracotta + steel blue passed (difference 20, needs 8+).
+  The sage green we first tried **failed** ("reads grey"), so we replaced it. Colour is never the only clue: every bar
+  has a written label and value.
+
+### 57. CSV download with no server
+- `new Blob([text], { type: 'text/csv' })` + `URL.createObjectURL(blob)` + a hidden `<a download>` that is clicked.
+- A **BOM** (`\uFEFF`) at the start makes Excel read UTF-8 correctly. Amounts are written as plain numbers
+  (`24687`, not `₹24,687`) so Excel can add them up. Values with commas are wrapped in quotes.
+
+### 58. Tabs the keyboard way (ARIA)
+- `role="tablist"` / `tab` / `tabpanel`, `aria-selected`, and a **roving tabindex** (only the selected tab is in the
+  Tab order). Arrow keys move between tabs, Home / End jump to the first / last.
+- The report is saved in the address (`reports.html#sales/top10`), so it can be bookmarked, and the `hashchange`
+  event makes Back / Forward and links on the same page work.
+
+### 59. Free-plan limits (a real-world lesson)
+- Firebase's free **Spark** plan allows about **50,000 reads per day**. Every document returned counts as one read.
+  Reading all 60 products on each page view costs 60 reads, so busy automated testing used the day's quota up.
+- When the quota is gone Firestore answers **HTTP 429** (`RESOURCE_EXHAUSTED`). The app maps this to a friendly
+  message ("The free daily limit has been reached. Please try again later.") with a **Try again** button. The limit
+  resets every day at midnight Pacific time (about 13:30 IST).
+- Ways to use fewer reads: cache what you already have (we do), use `count()` instead of downloading, and fetch only the
+  page you need.
+
+---
+
 ## Coming in later phases
-- Composite indexes (Phase 4 / 6)
-- Grouping and totals for reports in JavaScript (Phase 6)
 - Firestore security rules (Phase 7)

@@ -1,6 +1,6 @@
 # PLAN.md: ShopNest Online Shopping (Psiog IMPACT training assignment)
 
-> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done. Phase 5 done.
+> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done. Phase 5 done. Phase 6 done.
 > Sources read: the trainer's OneNote notes (json.pdf), the project brief,
 > `Docs/Online-Shopping-Firebase.postman_collection.json` (32 requests) and `Docs/seed-shop.ps1`.
 
@@ -218,6 +218,7 @@ online-shopping/
 │   ├── admin-dashboard.js
 │   ├── admin-inventory.js
 │   ├── admin-customers.js
+│   ├── reports-calc.js     Report maths: grouping, totals, India-time days
 │   └── admin-reports.js
 ├── assets/
 │   ├── favicon.svg         ShopNest logo as the browser tab icon
