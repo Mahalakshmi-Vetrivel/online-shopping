@@ -171,6 +171,11 @@ button.header-action:hover {
   display: inline-grid;
 }
 
+/* Leave room for the badge, so it never covers the word "Your". */
+.cart-btn .header-action__text {
+  margin-left: var(--space-2);
+}
+
 .cart-count {
   position: absolute;
   top: -8px;
