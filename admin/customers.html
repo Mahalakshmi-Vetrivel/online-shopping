@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2b1d16">
+  <title>Customers | ShopNest Admin</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body" data-layout="admin" data-guard="admin" data-page="customers" data-root="../" data-title="Customers">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin sidebar"></aside>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="admin-main">
+      <header class="admin-topbar" id="admin-topbar"></header>
+
+      <main id="main" class="admin-content page-main">
+        <div class="page-intro">
+          <div>
+            <h2 class="page-intro__title">Customers &amp; credit</h2>
+            <p class="page-intro__text">Everyone who signed up, and how much ShopNest credit they can use.</p>
+          </div>
+        </div>
+
+        <!-- Summary numbers (computed from all customer documents) -->
+        <section class="mini-stats" aria-label="Customer summary">
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-9"><span data-icon="users" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="sum-customers">-</p><p class="mini-stat__label">Customers</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-1"><span data-icon="wallet" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="sum-limit">-</p><p class="mini-stat__label">Total credit given</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-7"><span data-icon="receipt" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="sum-used">-</p><p class="mini-stat__label">Credit used</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-2"><span data-icon="alert" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="sum-near">-</p><p class="mini-stat__label">Used 80% or more</p></div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="customers-title">
+          <div class="panel-head">
+            <h3 class="panel-title" id="customers-title">All customers</h3>
+            <form class="toolbar" id="customer-filters" role="search" novalidate>
+              <div class="field toolbar__search">
+                <label class="visually-hidden" for="customer-search">Search customers by e-mail</label>
+                <div class="input-wrap">
+                  <span data-icon="search" data-size="18"></span>
+                  <input class="input" id="customer-search" type="search" placeholder="Search by e-mail, e.g. test" autocomplete="off">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <p class="result-line" id="customer-result-line" aria-live="polite"></p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption class="visually-hidden">Customers with their credit limit, credit used and credit available</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col" class="num">Credit limit</th>
+                  <th scope="col" class="num">Used</th>
+                  <th scope="col">Available</th>
+                  <th scope="col" class="hide-lg">Joined</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="customer-rows"></tbody>
+            </table>
+          </div>
+
+          <div class="panel-foot" id="customer-pager"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="../js/jquery-fallback.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/ui.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/admin-customers.js"></script>
+</body>
+</html>
