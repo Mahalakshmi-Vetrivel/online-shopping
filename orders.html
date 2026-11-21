@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
   <meta name="theme-color" content="#fffaf5">
   <title>My orders | ShopNest</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -13,8 +14,10 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/store.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/orders.css">
 </head>
-<!-- data-guard="customer": signed-out visitors go to the sign-in page, the admin goes to the dashboard -->
+<!-- data-guard="customer": signed-out visitors go to sign-in, the admin goes to the dashboard -->
 <body data-layout="store" data-guard="customer" data-page="orders">
   <a class="skip-link" href="#main">Skip to main content</a>
   <header class="site-header" id="site-header"></header>
@@ -25,15 +28,20 @@
         <div>
           <p class="eyebrow">Your account</p>
           <h1 class="section-title">My orders</h1>
-          <p class="section-sub" id="orders-greeting">Every order you place, with its bill.</p>
+          <p class="section-sub">Every order you have placed, newest first, each with its bill.</p>
         </div>
       </div>
-      <div class="empty-state">
-        <div class="empty-state__art"><span data-icon="receipt" data-size="40"></span></div>
-        <h2 class="empty-state__title">Your order history arrives in Phase 5</h2>
-        <p class="empty-state__text">You are signed in, so this page opened. Orders and bills will be listed here.</p>
-        <a class="btn btn-primary" href="index.html#trending">Continue shopping</a>
+
+      <!-- Orders, total spent and credit (filled by js/orders.js) -->
+      <section class="mini-stats orders-summary" id="orders-summary" aria-label="Your account summary"></section>
+
+      <div class="orders-toolbar">
+        <div class="chip-row" id="order-filters" role="group" aria-label="Filter orders by payment type"></div>
+        <p class="orders-toolbar__count" id="order-count-line" aria-live="polite"></p>
       </div>
+
+      <div class="order-list" id="order-list" aria-busy="true"></div>
+      <div id="order-pager"></div>
     </div>
   </main>
 
@@ -48,5 +56,8 @@
   <script src="js/auth.js"></script>
   <script src="js/placeholder.js"></script>
   <script src="js/layout.js"></script>
+  <script src="js/product-card.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
 </body>
 </html>

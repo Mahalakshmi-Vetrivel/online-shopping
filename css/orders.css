@@ -1,0 +1,355 @@
+/* =====================================================================
+   orders.css - "My orders" list, and the bill page with its print layout.
+   ===================================================================== */
+
+/* =========================== ORDERS PAGE =========================== */
+.orders-summary {
+  margin-bottom: var(--space-6);
+}
+
+.orders-summary .mini-stat--credit {
+  grid-column: span 2;
+}
+
+.orders-summary .mini-stat small {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.mini-stat--credit .credit-bar {
+  margin-block: 6px;
+}
+
+.orders-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.orders-toolbar .chip {
+  padding-left: var(--space-4);
+}
+
+.orders-toolbar__count {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.order-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.order-card {
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+
+.order-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.order-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.order-card__id {
+  font-weight: var(--fw-bold);
+}
+
+.order-card__id code {
+  font-size: var(--fs-sm);
+}
+
+.order-card__date {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.order-card__badges {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.order-card__body {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+
+.order-card__thumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order-card__thumbs .product-photo--thumb,
+.order-card__thumbs .product-art--thumb {
+  width: 52px;
+}
+
+.order-card__more {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  background: var(--color-muted-bg);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}
+
+.order-card__items {
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}
+
+.order-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.order-card__total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.order-card__total strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+/* =========================== BILL =========================== */
+.bill-page {
+  max-width: 860px;
+}
+
+.bill {
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.bill__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 2px solid var(--color-text);
+}
+
+.bill__tagline {
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.bill__meta {
+  text-align: right;
+}
+
+.bill__title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+}
+
+.bill__meta dl {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-3) 0 0;
+  font-size: var(--fs-sm);
+}
+
+.bill__meta dl div {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.bill__meta dt {
+  color: var(--color-text-muted);
+}
+
+.bill__meta dd {
+  margin: 0;
+  font-weight: var(--fw-semibold);
+}
+
+.bill__parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  padding-block: var(--space-6);
+}
+
+.bill__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.bill__value {
+  margin-top: var(--space-1);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.bill__sub {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.bill__table th,
+.bill__table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+}
+
+.bill__table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bill__table thead th {
+  border-block: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.bill__table tbody td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bill__item {
+  display: block;
+  font-weight: var(--fw-semibold);
+}
+
+.bill__cat {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.bill__table tfoot th {
+  text-align: right;
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+}
+
+.bill__grand th,
+.bill__grand td {
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+.bill__foot {
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px dashed var(--color-border-strong);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.bill-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 600px) {
+  .orders-summary .mini-stat--credit {
+    grid-column: auto;
+  }
+
+  .bill__meta {
+    text-align: left;
+  }
+
+  .bill__meta dl div {
+    justify-content: flex-start;
+  }
+
+  .bill__parties {
+    grid-template-columns: 1fr;
+  }
+
+  .order-card {
+    padding: var(--space-4);
+  }
+}
+
+/* =========================== PRINT =========================== */
+/* "Print bill" prints ONLY the bill: no header, footer, buttons or shadows. */
+@media print {
+  .announcement,
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .no-print,
+  .drawer,
+  .drawer-overlay,
+  .toast-region {
+    display: none !important;
+  }
+
+  body {
+    background: var(--white);
+  }
+
+  .section {
+    padding: 0;
+  }
+
+  .bill {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .page-main {
+    animation: none;
+  }
+}
