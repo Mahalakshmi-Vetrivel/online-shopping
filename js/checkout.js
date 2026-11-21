@@ -336,7 +336,18 @@
       ignoreCartEvents = true;
       Cart.clear();
       ignoreCartEvents = false;
-      Auth.setFlash(`Order ${orderId} is placed. Thank you, ${order.customerName}!`, 'success', 'Order placed');
+
+      // Bill by e-mail (off unless CONFIG.EMAIL.ENABLED). We wait at most 4 seconds,
+      // and a failed e-mail never undoes the order.
+      const emailed = await Promise.race([
+        Api.sendOrderEmail(order, orderId),
+        new Promise((resolve) => setTimeout(() => resolve(false), 4000))
+      ]);
+      Auth.setFlash(
+        `Order ${orderId} is placed. Thank you, ${order.customerName}!${emailed ? ` A copy of the bill was sent to ${order.customerEmail}.` : ''}`,
+        'success',
+        'Order placed'
+      );
       window.location.replace(`bill.html?id=${encodeURIComponent(orderId)}&placed=1`);
     } catch (error) {
       if (error.code === 'FAILED_PRECONDITION' || error.code === 'ABORTED') {

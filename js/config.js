@@ -32,12 +32,20 @@ const CONFIG = Object.freeze({
   CURRENCY: 'INR',
 
   // ---------- Security ----------
-  // When Firestore security rules are switched on (Phase 7) every request
-  // must prove who is calling. Setting this to true makes api.js send
-  // "Authorization: Bearer <idToken>" with every Firestore request.
-  USE_AUTH_HEADER: false,
+  // With Firestore security rules (docs/firestore.rules) every write must prove who
+  // is calling. true = api.js sends "Authorization: Bearer <idToken>" with each
+  // Firestore request of a signed-in user. Guests (no token) can still read the
+  // catalogue. Keep this true.
+  USE_AUTH_HEADER: true,
 
-  // ---------- Order e-mail (Phase 7, OFF until the trainer approves) ----------
+  // ---------- Order e-mail: OFF until the trainer approves ----------
+  // Firebase only sends sign-in e-mails (like "reset password"), so a bill by
+  // e-mail needs a small third-party service. We use EmailJS (emailjs.com), called
+  // through $.ajax in Api.sendOrderEmail(). To switch it on:
+  //   1. create a free EmailJS account, an e-mail service and a template
+  //   2. the template may use these variables:
+  //      {{to_email}} {{to_name}} {{order_id}} {{order_total}} {{payment}} {{items}} {{order_date}}
+  //   3. paste the three ids below and set ENABLED to true
   EMAIL: Object.freeze({
     ENABLED: false,
     SERVICE_ID: '',

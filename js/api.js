@@ -655,6 +655,46 @@ const Api = (function () {
     return orderId;
   }
 
+  /**
+   * Sends the bill by e-mail through EmailJS (a different server from Firebase).
+   * OFF by default (CONFIG.EMAIL.ENABLED). It NEVER throws: if the e-mail fails the
+   * order is still placed, so the shopper just does not get the copy.
+   * Returns true when EmailJS accepted the message.
+   */
+  async function sendOrderEmail(order, orderId) {
+    const settings = CONFIG.EMAIL;
+    if (!settings.ENABLED || !settings.SERVICE_ID || !settings.TEMPLATE_ID || !settings.PUBLIC_KEY) return false;
+
+    const items = order.items
+      .map((item) => `${item.title} x ${item.qty} = ${Ui.formatMoney(item.lineTotal)}`)
+      .join('\n');
+    try {
+      await $.ajax({
+        url: 'https://api.emailjs.com/api/v1.0/email/send',
+        method: 'POST',
+        contentType: 'application/json',
+        timeout: 8000,
+        data: JSON.stringify({
+          service_id: settings.SERVICE_ID,
+          template_id: settings.TEMPLATE_ID,
+          user_id: settings.PUBLIC_KEY,
+          template_params: {
+            to_email: order.customerEmail,
+            to_name: order.customerName,
+            order_id: orderId,
+            order_total: Ui.formatMoney(order.totalAmount),
+            payment: order.paymentType === 'credit' ? 'ShopNest credit' : 'Cash',
+            order_date: Ui.formatDate(new Date()),
+            items
+          }
+        })
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   /* ---------- Reports (admin) ---------- */
 
   /**
@@ -883,6 +923,7 @@ const Api = (function () {
     getActiveProducts,
     getFeaturedProducts,
     // orders
+    sendOrderEmail,
     getOrder,
     getCustomerOrders,
     placeOrder,
