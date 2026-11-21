@@ -7,11 +7,11 @@
 
 const CONFIG = Object.freeze({
   // ---------- Firebase project ----------
-  PROJECT_ID: 'online-shopping-b3e8d',
+  PROJECT_ID: 'online-shopping-4134f',
   // The Web API key only identifies the project. It is NOT a secret:
   // every Firebase web app ships it to the browser. Data is protected by
   // Firestore security rules (Phase 7), not by hiding this key.
-  API_KEY: 'AIzaSyCu498WCp0_BU35xVTX1MauBcZkSR-ENhw',
+  API_KEY: 'AIzaSyBjKVw6eyBiy-H10EiBl82PFXiPI7crW5U',
 
   // ---------- Roles ----------
   // The one and only admin. Every other signed-in user is a customer.

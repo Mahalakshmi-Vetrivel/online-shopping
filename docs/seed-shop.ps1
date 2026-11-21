@@ -7,8 +7,8 @@
 
 $ErrorActionPreference = 'Stop'
 
-$projectId = 'online-shopping-b3e8d'
-$apiKey    = 'AIzaSyCu498WCp0_BU35xVTX1MauBcZkSR-ENhw'
+$projectId = 'online-shopping-4134f'
+$apiKey    = 'AIzaSyBjKVw6eyBiy-H10EiBl82PFXiPI7crW5U'
 $base      = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents"
 
 # ---------- Catalog: category name -> products ----------

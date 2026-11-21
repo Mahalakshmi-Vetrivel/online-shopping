@@ -73,7 +73,7 @@ You can also create your own customer on the sign-up page. The admin is the one 
 
 ## Firebase setup
 
-The backend already exists (project `online-shopping-b3e8d`). Settings are in `js/config.js`.
+The backend already exists (project `online-shopping-4134f`). Settings are in `js/config.js`.
 
 **1. Security rules (do this before 20 Dec 2026).** Firestore "test mode" (open to everyone) expires about 20 Dec 2026,
 after which every request would be refused. Replace it with the rules in [docs/firestore.rules](docs/firestore.rules):
