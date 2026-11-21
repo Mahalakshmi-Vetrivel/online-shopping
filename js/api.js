@@ -217,16 +217,26 @@ const Api = (function () {
      ------------------------------------------------------------------ */
   const session = {
     get() {
+      let stored;
       try {
-        return JSON.parse(localStorage.getItem(SESSION_KEY)) || null;
+        stored = JSON.parse(localStorage.getItem(SESSION_KEY));
       } catch (error) {
         return null; // corrupted value: treat as signed out
       }
+      if (!stored) return null;
+      // A sign-in made for ANOTHER Firebase project (or by an older version that did not
+      // record the project) is useless here and would be refused by the server with
+      // "no permission". Throw it away, so the visitor simply appears signed out.
+      if (stored.projectId !== CONFIG.PROJECT_ID) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return stored;
     },
 
     /** Merges new values into the stored session. expiresIn is in seconds. */
     save(values) {
-      const next = { ...(session.get() || {}), ...values };
+      const next = { ...(session.get() || {}), ...values, projectId: CONFIG.PROJECT_ID };
       if (values.expiresIn) {
         next.expiresAt = Date.now() + Number(values.expiresIn) * 1000;
         delete next.expiresIn;
