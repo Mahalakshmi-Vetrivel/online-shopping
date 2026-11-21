@@ -15,7 +15,7 @@ const CONFIG = Object.freeze({
 
   // ---------- Roles ----------
   // The one and only admin. Every other signed-in user is a customer.
-  ADMIN_EMAIL: 'mahalakshmivsm7@gmail.com',
+  ADMIN_EMAIL: 'admin@email.com',
 
   // ---------- Business rules ----------
   DEFAULT_CREDIT_LIMIT: 1000, // credit limit given to every new customer (INR)

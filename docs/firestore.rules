@@ -28,7 +28,7 @@ service cloud.firestore {
 
     // true only for the one admin e-mail (same address as ADMIN_EMAIL in js/config.js)
     function isAdmin() {
-      return signedIn() && request.auth.token.email == 'mahalakshmivsm7@gmail.com';
+      return signedIn() && request.auth.token.email == 'admin@email.com';
     }
 
     // Categories: everyone can read, only the admin can change.

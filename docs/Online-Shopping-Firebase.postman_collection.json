@@ -1053,19 +1053,19 @@
     },
     {
       "key": "adminEmail",
-      "value": "mahalakshmivsm7@gmail.com"
+      "value": "admin@email.com"
     },
     {
       "key": "adminPassword",
-      "value": ""
+      "value": "admin@123"
     },
     {
       "key": "customerEmail",
-      "value": "testcustomer1@example.com"
+      "value": "customer@email.com"
     },
     {
       "key": "customerPassword",
-      "value": ""
+      "value": "customer@123"
     },
     {
       "key": "categoryId",

@@ -5,7 +5,6 @@ The browser talks to **Firebase** (Firestore database + Authentication) through 
 **JSON over AJAX** (`$.ajax`). There is no Firebase SDK, no framework and no build step.
 
 > Psiog IMPACT training assignment. Status: **all phases complete.**
-> Planning notes: [PLAN.md](PLAN.md) · Every concept explained simply: [LEARNING.md](LEARNING.md)
 
 ```
 Browser (HTML / CSS / JS / jQuery) --- JSON over AJAX ---> Firebase
@@ -64,9 +63,13 @@ once; if a page loads only half-way, refresh it (Live Server does not have this 
 
 Pages declare who may open them with `<body data-guard="guest | customer | admin">` (see `js/auth.js`).
 
-## Test accounts
-- **Customer:** `testcustomer1@example.com` (password shared privately by the project owner, or sign up for your own account)
-- **Admin:** `mahalakshmivsm7@gmail.com` (the password is not stored in this project)
+## Demo accounts
+| Role | E-mail | Password |
+|------|--------|----------|
+| Admin | `admin@email.com` | `admin@123` |
+| Customer | `customer@email.com` | `customer@123` |
+
+You can also create your own customer on the sign-up page. The admin is the one account whose e-mail equals `ADMIN_EMAIL` in `js/config.js`.
 
 ## Firebase setup
 
@@ -109,7 +112,7 @@ js/         config.js  api.js (ALL server calls)  auth.js  ui.js  icons.js  layo
             jquery-fallback.js
 assets/     favicon.svg  images/ (products, categories, hero)
 vendor/     jquery-3.7.1.min.js  (used if the CDN is unreachable)
-docs/       Postman collection, seed scripts, firestore.rules, IMAGE-CREDITS.md
+docs/       Postman collection, seed script, firestore.rules, IMAGE-CREDITS.md
 ```
 
 ## Technical rules followed
