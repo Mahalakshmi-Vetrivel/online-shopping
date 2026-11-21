@@ -1,0 +1,610 @@
+/* =====================================================================
+   admin.css - admin dashboard layout: dark sidebar, top bar,
+   stat cards, panels, toolbars and data tables.
+   ===================================================================== */
+
+.admin-body {
+  background: var(--color-admin-bg);
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+}
+
+/* =========================== SIDEBAR =========================== */
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  height: 100vh;
+  padding: var(--space-6) var(--space-4);
+  overflow-y: auto;
+  background: var(--gradient-dark);
+  color: var(--color-sidebar-text);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-2);
+}
+
+.sidebar-tag {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--white-a10);
+  font-size: 0.65rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.sidebar-section-label {
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: 0.68rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-sidebar-muted);
+}
+
+.sidebar-nav {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.sidebar-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-sidebar-text);
+  text-decoration: none;
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+
+.sidebar-link:hover {
+  background: var(--white-a10);
+  color: var(--color-sidebar-active);
+}
+
+.sidebar-link[aria-current="page"] {
+  background: var(--gradient-button);
+  color: var(--color-sidebar-active);
+  box-shadow: var(--shadow-glow);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--white-a10);
+}
+
+.sidebar-user__email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-xs);
+  color: var(--color-sidebar-text);
+}
+
+.sidebar-user__role {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--white);
+}
+
+/* Dark overlay behind the sidebar on small screens. */
+.sidebar-overlay {
+  display: none;
+}
+
+/* =========================== MAIN AREA =========================== */
+.admin-main {
+  min-width: 0; /* lets wide tables scroll instead of stretching the grid */
+}
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--header-h);
+  padding: 0 var(--space-8);
+  background: var(--color-glass);
+  border-bottom: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.admin-topbar__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+.admin-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.admin-menu-toggle {
+  display: none;
+}
+
+.admin-content {
+  padding: var(--space-8);
+}
+
+.page-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.page-intro__title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-black);
+}
+
+.page-intro__text {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+/* =========================== STAT CARDS =========================== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5);
+}
+
+.stat-card {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Faint coloured circle in the corner of each card. */
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--tone-a), var(--tone-b));
+  opacity: 0.1;
+}
+
+.stat-card__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--tone-a), var(--tone-b));
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.stat-card__value {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+}
+
+.stat-card__value .skeleton {
+  display: block;
+  width: 60%;
+  height: 2rem;
+}
+
+/* =========================== PANELS + TABLES =========================== */
+.panel {
+  margin-top: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panel-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.panel-body {
+  padding: var(--space-6);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+/* =========================== MINI STATS (inventory summary) =========================== */
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.mini-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.mini-stat__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--tone-a), var(--tone-b));
+  color: var(--white);
+}
+
+.mini-stat__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: 1.1;
+}
+
+.mini-stat__label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* =========================== TABLE TOOLBAR =========================== */
+.toolbar .field {
+  min-width: 200px;
+}
+
+.toolbar__search {
+  min-width: 260px;
+}
+
+.result-line {
+  padding: var(--space-3) var(--space-6) 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.result-line:empty {
+  display: none;
+}
+
+.panel-foot {
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+/* =========================== PRODUCT ROWS =========================== */
+.cell-product__title {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: var(--fw-semibold);
+}
+
+.cell-product__id {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: var(--fw-regular);
+  color: var(--color-text-muted);
+}
+
+/* Hidden (inactive) products look faded so they stand out. */
+.data-table tr.is-inactive .cell-product,
+.data-table tr.is-inactive td:nth-child(2),
+.data-table tr.is-inactive td:nth-child(3) {
+  opacity: 0.5;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.btn-icon-danger:hover:not([disabled]) {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+/* =========================== CUSTOMER ROWS =========================== */
+.cell-customer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.cell-customer .avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  font-size: var(--fs-sm);
+}
+
+.cell-customer__email {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* "₹501" above a small bar showing how much credit is used. */
+.credit-cell {
+  display: grid;
+  gap: 6px;
+  min-width: 130px;
+}
+
+.credit-cell__amount {
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* <progress> styled the same in every browser. */
+.credit-bar {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-muted-bg);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.credit-bar::-webkit-progress-bar {
+  border-radius: var(--radius-pill);
+  background: var(--color-muted-bg);
+}
+
+.credit-bar::-webkit-progress-value {
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+.credit-bar::-moz-progress-bar {
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+.credit-bar--warn::-webkit-progress-value { background: var(--color-highlight); }
+.credit-bar--warn::-moz-progress-bar      { background: var(--color-highlight); }
+.credit-bar--full::-webkit-progress-value { background: var(--color-danger); }
+.credit-bar--full::-moz-progress-bar      { background: var(--color-danger); }
+
+/* =========================== CREDIT FORM (modal) =========================== */
+.credit-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.credit-summary__item {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.credit-summary__label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.credit-summary__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+.quick-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quick-amounts .chip {
+  padding-left: var(--space-4);
+}
+
+.chip--danger:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.credit-after {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+.credit-after:empty {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .credit-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================== PRODUCT FORM (modal) =========================== */
+.product-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.product-form__preview {
+  position: sticky;
+  top: 0;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-alt);
+}
+
+.product-card--preview {
+  pointer-events: none;
+}
+
+.product-card--preview.is-hidden-product {
+  opacity: 0.6;
+}
+
+.readonly-id {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.readonly-id code {
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  background: var(--color-muted-bg);
+  color: var(--color-text);
+}
+
+/* =========================== RESPONSIVE =========================== */
+/* The "Updated" column is the least important: hide it on narrower screens. */
+@media (max-width: 1360px) {
+  .data-table .hide-lg {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .mini-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .product-form {
+    grid-template-columns: 1fr;
+  }
+
+  .product-form__preview {
+    position: static;
+    order: -1;
+  }
+
+  .toolbar,
+  .toolbar .field,
+  .toolbar__search {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 960px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar slides in from the left. */
+  .admin-sidebar {
+    position: fixed;
+    left: 0;
+    z-index: var(--z-sidebar);
+    width: min(var(--sidebar-w), 85vw);
+    transform: translateX(-100%);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .admin-sidebar.is-open {
+    transform: none;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar-overlay.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-sidebar) - 1);
+    display: block;
+    background: var(--color-overlay);
+    animation: fade-in var(--dur) var(--ease-out);
+  }
+
+  .admin-menu-toggle {
+    display: inline-flex;
+  }
+
+  .admin-topbar,
+  .admin-content {
+    padding-inline: var(--space-4);
+  }
+}
