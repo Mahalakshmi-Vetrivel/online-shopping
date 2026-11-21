@@ -1,6 +1,6 @@
 # PLAN.md: ShopNest Online Shopping (Psiog IMPACT training assignment)
 
-> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done. Phase 5 done. Phase 6 done.
+> Status: **COMPLETE** (approved 21 Nov 2026; all phases built). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done. Phase 5 done. Phase 6 done. Phase 7 done (all phases complete).
 > Sources read: the trainer's OneNote notes (json.pdf), the project brief,
 > `Docs/Online-Shopping-Firebase.postman_collection.json` (32 requests) and `Docs/seed-shop.ps1`.
 
@@ -181,7 +181,6 @@ online-shopping/
 ├── checkout.html           Review cart, choose Cash/Credit, pay
 ├── bill.html               Order bill / invoice (?id=ORD…)
 ├── orders.html             Order history
-├── test-api.html           Phase 0 only: lists categories to prove api.js works (deleted in Phase 7)
 ├── admin/
 │   ├── dashboard.html
 │   ├── inventory.html
@@ -197,7 +196,6 @@ online-shopping/
 │   ├── jquery-fallback.js  Loads vendor/jquery if the CDN fails
 │   ├── icons.js            All inline SVG icons (UI + category icons)
 │   ├── layout.js           Shared store header/footer + admin sidebar/top bar
-│   ├── test-api.js         Phase 0 test bench logic (deleted in Phase 7)
 │   ├── config.js           PROJECT_ID, API_KEY, ADMIN_EMAIL, DEFAULT_CREDIT_LIMIT, PAGE_SIZE, HIGH_STOCK, LOW_STOCK, EMAIL, USE_AUTH_HEADER
 │   ├── api.js              ALL $.ajax calls + toFirestore/fromFirestore + error mapping
 │   ├── auth.js             Session (localStorage), token refresh, guards, header user menu
@@ -233,7 +231,7 @@ online-shopping/
 ```
 
 Changes from the suggested structure: I added `placeholder.js`, `icons.js`, `layout.js`,
-`jquery-fallback.js`, `bill.js`, `auth-pages.js`, `admin-dashboard.js` and a temporary `test-api.html`, so each file stays small and does one job.
+`jquery-fallback.js`, `bill.js`, `auth-pages.js`, `admin-dashboard.js` (the Phase 0 test page `test-api.html` was removed in Phase 7), so each file stays small and does one job.
 The cart is a **drawer** on every store page instead of a separate `cart.html`.
 
 ---
@@ -269,6 +267,14 @@ and a suggested commit message. Then I'll stop and wait for you.
 | **7. Finish** | Order email (if approved), Firestore **security rules** text for you to paste (before 20 Dec), switch on `USE_AUTH_HEADER`, delete `test-api.html`, responsive + accessibility pass, README. | Rules applied: a customer can't edit inventory; the admin can. Check the layout at 320px. |
 
 ---
+
+## 7b. Phase 7 outcome
+
+- **Order e-mail:** built but OFF (`CONFIG.EMAIL.ENABLED = false`) until the trainer approves. `Api.sendOrderEmail()` uses EmailJS.
+- **Security rules:** `docs/firestore.rules` (simple: public read of the catalogue, signed-in writes, admin-only product create / delete).
+  The user publishes them in the Firebase console before 20 Dec 2026. `USE_AUTH_HEADER` is on.
+- **Final polish:** `test-api.html` removed; automatic audit of structure, accessibility and colour contrast (brand colour darkened to
+  meet AA); README rewritten.
 
 ## 8. How to run (from Phase 0 onwards)
 

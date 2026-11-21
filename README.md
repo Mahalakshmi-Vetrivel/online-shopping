@@ -1,67 +1,126 @@
 # ShopNest: Online Shopping
 
-A colourful, responsive online store built with **HTML, CSS, JavaScript and jQuery only**.
-The browser talks to **Firebase** (Firestore database + Authentication) through its REST APIs,
-using **JSON over AJAX** (`$.ajax`).
+A colourful, responsive online store built with **HTML5, CSS3, JavaScript (ES6+) and jQuery only**.
+The browser talks to **Firebase** (Firestore database + Authentication) through its REST APIs, using
+**JSON over AJAX** (`$.ajax`). There is no Firebase SDK, no framework and no build step.
 
-> Psiog IMPACT training assignment. Status: **Phase 6 (dashboard and reports) complete.** See [PLAN.md](PLAN.md).
+> Psiog IMPACT training assignment. Status: **all phases complete.**
+> Planning notes: [PLAN.md](PLAN.md) · Every concept explained simply: [LEARNING.md](LEARNING.md)
+
+```
+Browser (HTML / CSS / JS / jQuery) --- JSON over AJAX ---> Firebase
+                                                            ├─ Authentication  (sign up, sign in, reset password)
+                                                            └─ Firestore       (categories, inventory, customers, orders)
+```
+
+## What it does
+
+**Customer**
+- Sign up, sign in, sign out, reset password, with validation
+- Browse the catalogue: category chips, live search, sort, pagination; product details page (active products only)
+- Cart drawer with quantities and stock limits (guests can fill it; it merges when they sign in)
+- Checkout: pay by **Cash** or **ShopNest credit** (allowed only if `creditUsed + total <= creditLimit`)
+- One atomic purchase: the order is saved, stock goes down and credit goes up together, or nothing changes
+- Printable bill and order history
+
+**Admin** (one account, identified by its e-mail)
+- Inventory: add, edit, activate / deactivate, delete (with a Yes / No check), filter, search, pagination
+- Customers: credit limit, used and available; edit the limit
+- Dashboard: key numbers and charts
+- Reports with From / To dates and CSV download: **Customer** (all, top 10, cash, credit), **Inventory** (stock, category-wise,
+  high > 100, low < 15), **Sales** (all, category-wise, cash, credit, top 10 and bottom 10 items)
 
 ## Run it locally
 
-The pages must be served over `http://`. Opening them by double-clicking (`file://`) will not work reliably.
+The pages must be served over `http://` (double-clicking the file, `file://`, does not work reliably).
 
-**Option A: VS Code Live Server**
+**Option A: VS Code Live Server (recommended)**
 1. Install the *Live Server* extension.
-2. Right-click `index.html`, then choose **Open with Live Server**.
+2. Right-click `index.html` and choose **Open with Live Server**.
 
 **Option B: Python**
 ```bash
 cd online-shopping
 python -m http.server 5500
 ```
-Then open <http://localhost:5500>.
+Then open <http://localhost:5500>. Python's built-in server can refuse connections when a page asks for many files at
+once; if a page loads only half-way, refresh it (Live Server does not have this problem).
 
-## Pages so far
+## Pages
 
 | URL | Who can open it | What it shows |
 |-----|-----------------|---------------|
-| `/index.html` | everyone | Store home: hero, categories, trending, and the catalogue (category chips, live search, sort, pagination) |
-| `/product.html?id=...` | everyone | Product details: photo, price, stock, quantity, related products (active products only) |
-| `/login.html` | signed-out visitors | Sign in |
-| `/signup.html` | signed-out visitors | Create account (+ customer profile with starter credit) |
-| `/reset-password.html` | everyone | Send a password-reset e-mail |
-| Cart drawer | everyone | Slide-in cart on every store page (guests can fill it; it merges when they sign in) |
-| `/checkout.html` | customers | Review items, choose Cash or ShopNest credit, place the order (stock and credit checked again) |
-| `/bill.html?id=ORD...` | the customer who owns the order | Printable bill |
-| `/orders.html` | customers | Order history: newest first, Cash / Credit filter, 5 per page, credit summary |
-| `/admin/inventory.html` | admin only | Products: add, edit, activate / deactivate, delete; filter by category; search; pagination |
-| `/admin/customers.html` | admin only | Customers with credit limit / used / available; search by e-mail; edit credit limit |
-| `/admin/dashboard.html` | admin only | Key numbers (products, low stock, customers, total sales), 7-day sales chart, cash vs credit, recent orders, restock list |
-| `/admin/reports.html` | admin only | Customer, inventory and sales reports with From / To dates, charts, paging and CSV download |
-| `/test-api.html` | everyone | Developer test bench (removed in Phase 7) |
+| `index.html` | everyone | Store home: hero, categories, trending, catalogue |
+| `product.html?id=...` | everyone | Product details, quantity, related products |
+| `login.html`, `signup.html` | signed-out visitors | Sign in, create account |
+| `reset-password.html` | everyone | Password-reset e-mail |
+| `checkout.html` | customers | Review, choose Cash or Credit, place the order |
+| `bill.html?id=ORD...` | the order's owner | Printable bill |
+| `orders.html` | customers | Order history |
+| `admin/dashboard.html` | admin | Key numbers, charts, recent orders, restock list |
+| `admin/inventory.html` | admin | Product management |
+| `admin/customers.html` | admin | Credit limits |
+| `admin/reports.html` | admin | Customer, inventory and sales reports |
+
+Pages declare who may open them with `<body data-guard="guest | customer | admin">` (see `js/auth.js`).
 
 ## Test accounts
 - **Customer:** `testcustomer1@example.com` (password shared privately by the project owner, or sign up for your own account)
 - **Admin:** `mahalakshmivsm7@gmail.com` (the password is not stored in this project)
 
-## Photos
-Product, category and banner photos are in `assets/images/` (from Unsplash, free licence; see
-[docs/IMAGE-CREDITS.md](docs/IMAGE-CREDITS.md)). Each product's `imageUrl` field points to its photo.
-`docs/add-product-images.ps1` set this field for the 60 seeded products. It is safe to run again.
+## Firebase setup
 
-## If pages load only half-way
-Python's built-in server (`python -m http.server`) can refuse connections when a page asks for many files at
-once. **VS Code Live Server does not have this problem**, so prefer it. If you use Python, refresh the page.
+The backend already exists (project `online-shopping-b3e8d`). Settings are in `js/config.js`.
 
-## Firebase free-plan limit
-The free Spark plan allows about 50,000 document reads per day. If the app shows "The free daily limit has been
-reached", wait until the limit resets (midnight Pacific time, about 13:30 IST) and try again.
+**1. Security rules (do this before 20 Dec 2026).** Firestore "test mode" (open to everyone) expires about 20 Dec 2026,
+after which every request would be refused. Replace it with the rules in [docs/firestore.rules](docs/firestore.rules):
+1. Firebase console → **Build → Firestore Database → Rules**
+2. Delete the existing text, paste the whole file, click **Publish**.
 
-## Tech rules
-- No frameworks, no CSS libraries, no Firebase SDK, no build step.
-- All server calls go through `js/api.js`. Settings live in `js/config.js`.
-- The design system is in `css/theme.css` (CSS variables only).
-- Fonts: Fraunces (headings) and Plus Jakarta Sans (text) from Google Fonts. If they can't load, system fonts are used.
+In short: anyone can **read** the catalogue; changing anything needs a signed-in user; only the admin e-mail can add or
+delete products. The app sends the sign-in token with every request (`USE_AUTH_HEADER: true` in `js/config.js`).
+The rules are deliberately simple, because this is an assignment.
+
+*Note:* once the rules are published, the PowerShell seed scripts in `docs/` (and any Postman call without a token) will be
+refused. Run them before publishing, or add an `Authorization: Bearer <idToken>` header.
+
+**2. Order e-mail (optional, off).** Firebase sends only sign-in e-mails, so a bill by e-mail needs a small extra service.
+The code is ready behind a switch (`CONFIG.EMAIL.ENABLED`, `Api.sendOrderEmail()` using [EmailJS](https://www.emailjs.com)).
+To turn it on: create an EmailJS service and template, paste the three ids into `js/config.js`, set `ENABLED: true`.
+Template variables: `{{to_email}} {{to_name}} {{order_id}} {{order_total}} {{payment}} {{items}} {{order_date}}`.
+If an e-mail fails, the order is still placed.
+
+**3. Index requirement.** Every query in the app works with Firestore's automatic single-field indexes. If a future change
+needs a composite index, Firestore's error message contains a link that creates it with one click.
+
+**Free-plan limit.** The free Spark plan allows about 50,000 document reads per day. If the app shows "The free daily
+limit has been reached", wait a little and try again (the daily quota resets at midnight Pacific time).
 
 ## Folder structure
-See section 5 of [PLAN.md](PLAN.md). Concepts are explained in [LEARNING.md](LEARNING.md).
+
+```
+index.html  product.html  login.html  signup.html  reset-password.html  checkout.html  bill.html  orders.html
+admin/      dashboard.html  inventory.html  customers.html  reports.html
+css/        theme.css (design tokens: variables only)  base.css  components.css  store.css  product.css
+            cart.css  orders.css  auth.css  admin.css
+js/         config.js  api.js (ALL server calls)  auth.js  ui.js  icons.js  layout.js  validation.js  placeholder.js
+            store.js  product-card.js  product.js  cart.js  checkout.js  bill.js  orders.js  auth-pages.js
+            admin-inventory.js  admin-customers.js  admin-dashboard.js  admin-reports.js  reports-calc.js
+            jquery-fallback.js
+assets/     favicon.svg  images/ (products, categories, hero)
+vendor/     jquery-3.7.1.min.js  (used if the CDN is unreachable)
+docs/       Postman collection, seed scripts, firestore.rules, IMAGE-CREDITS.md
+```
+
+## Technical rules followed
+- Only HTML5, CSS3, vanilla JS (ES6+) and jQuery 3 (official CDN with a local fallback).
+- All server calls go through **one** module, `js/api.js`, with `toFirestore()` / `fromFirestore()` converters.
+- Every colour, size and animation timing lives in `css/theme.css`; other CSS files only use `var(--...)`.
+- No inline CSS or JavaScript, no `console.log`, labels on every input, alt text on every image.
+- Responsive from 320px to 1440px, AA colour contrast, visible keyboard focus, `aria-live` toasts,
+  `prefers-reduced-motion` respected.
+- Friendly error messages for every failed request, and every create / pay button is disabled while its request runs.
+
+## Credits
+Product and banner photos are from [Unsplash](https://unsplash.com) (free licence), see
+[docs/IMAGE-CREDITS.md](docs/IMAGE-CREDITS.md). Fonts: Fraunces and Plus Jakarta Sans (Google Fonts).

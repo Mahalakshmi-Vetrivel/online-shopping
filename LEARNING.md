@@ -68,7 +68,7 @@ New sections are added at the end of every phase.
   - `fromFirestore(doc)` gives `{ id: 'AbC123', title: 'Pen', qty: 5 }`.
 - The **document ID** is the last part of `doc.name`:
   `"projects/.../documents/inventory/AbC123"` gives `"AbC123"`.
-- **See it live:** test-api.html, section 3.
+- **Try it:** `Api.toFirestore({ title: 'Pen', qty: 5 })` in the browser console shows the typed JSON.
 
 ### 8. Pagination with pageToken
 - We don't download all products at once. We ask for one **page** (for example 5 items).
@@ -76,7 +76,7 @@ New sections are added at the end of every phase.
 - Sending `pageToken=<bookmark>` gets the next page. When there is no `nextPageToken`, we are on the last page.
 - Firestore only gives the *next* bookmark, so to go **back** we remember every token we used
   (`Ui.createTokenPager()` in `js/ui.js`).
-- **See it live:** test-api.html, section 2. The token is shown under the table.
+- **See it live:** Admin > Inventory > "Next" (the token changes with every page).
 
 ### 9. Counting with runAggregationQuery
 - `POST :runAggregationQuery` with `count: {}` returns **how many** documents match,
@@ -439,5 +439,49 @@ One `POST :commit` carries several **writes** that succeed or fail **together**:
 
 ---
 
-## Coming in later phases
-- Firestore security rules (Phase 7)
+## Phase 7: Security rules, e-mail and final checks
+
+### 60. Firestore security rules (simple version)
+- **Test mode** lets anyone on the internet read and write the whole database, and it **expires** (about 20 Dec 2026).
+  Security **rules** replace it. They run on Google's server for every request, so they cannot be bypassed by editing the page.
+- Our rules (`docs/firestore.rules`) in plain words:
+  - anyone may **read** categories and products (the store is public);
+  - changing anything needs a **signed-in** user (`request.auth != null`);
+  - only the **admin e-mail** may add or delete products or change categories
+    (`request.auth.token.email == '...'`).
+- This is deliberately simple. A real shop would also check that a customer can read only *their own* orders
+  and can lower stock only by the amount they bought.
+- **Why checks in the page are not security:** the route guards (concept 21) only hide screens. Anyone can call the API
+  directly, so the rules are what really protect the data.
+
+### 61. Sending the token: `Authorization: Bearer <idToken>`
+- Rules need to know who is calling. `api.js` adds the header `Authorization: Bearer <idToken>` to every Firestore request
+  of a signed-in user (`USE_AUTH_HEADER: true`). Guests send no token, so they can only do what the rules allow
+  for everyone (read the catalogue).
+- The browser first sends a "preflight" `OPTIONS` request to ask the server whether this header is allowed (**CORS**).
+  Firestore answers yes (we checked `Access-Control-Allow-Headers: authorization`).
+
+### 62. Optional e-mail without breaking the order
+- Firebase sends only sign-in e-mails, so a bill by e-mail needs another service (EmailJS). `Api.sendOrderEmail()` is
+  behind a switch (`CONFIG.EMAIL.ENABLED`, off for now).
+- It **never throws**: a failed e-mail must not undo a paid order. Checkout waits at most 4 seconds for it
+  (`Promise.race` between the request and a timer), then moves on.
+
+### 63. Checking quality automatically
+- Before finishing, a small script checked every page for: a language and title, labels on inputs, alt text on images,
+  broken links, duplicate ids, inline styles or scripts, `console.log`, hard-coded colours outside `theme.css`,
+  `$.ajax` outside `api.js`, and CSS variables that do not exist.
+- **Colour contrast** was computed from the theme values (WCAG AA needs 4.5:1 for normal text). It found the brand
+  terracotta slightly too light on the cream background (4.43:1), so it was darkened to `#b94727` (5.07:1).
+  Accessibility is something you can **measure**, not just feel.
+
+### 64. Looking back: what each part of the brief taught
+| Brief item | Where to look |
+|---|---|
+| JSON + AJAX + REST | concepts 2-5, `js/api.js` |
+| Firestore typed values, pageToken | 7-8, 28 |
+| Auth tokens, guards | 18-21 |
+| CRUD, soft delete, updateMask | 25-27 |
+| Atomic commit, preconditions | 47-48 |
+| Reports and grouping | 53-56 |
+| Security rules | 60-61 |
