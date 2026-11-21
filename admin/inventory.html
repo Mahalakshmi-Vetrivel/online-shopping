@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2b1d16">
+  <title>Inventory | ShopNest Admin</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body" data-layout="admin" data-guard="admin" data-page="inventory" data-root="../" data-title="Inventory">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin sidebar"></aside>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="admin-main">
+      <header class="admin-topbar" id="admin-topbar"></header>
+
+      <main id="main" class="admin-content page-main">
+        <div class="page-intro">
+          <div>
+            <h2 class="page-intro__title">Products</h2>
+            <p class="page-intro__text">Add, edit, hide or remove what customers can buy.</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="add-product">
+            <span data-icon="plus" data-size="18"></span> Add product
+          </button>
+        </div>
+
+        <!-- Summary numbers (runAggregationQuery count) -->
+        <section class="mini-stats" aria-label="Inventory summary">
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-1"><span data-icon="box" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="count-all">-</p><p class="mini-stat__label">Products</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-6"><span data-icon="eye" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="count-active">-</p><p class="mini-stat__label">Active in store</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-12"><span data-icon="eyeOff" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="count-inactive">-</p><p class="mini-stat__label">Hidden (inactive)</p></div>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat__icon tone-7"><span data-icon="alert" data-size="18"></span></span>
+            <div><p class="mini-stat__value" id="count-low">-</p><p class="mini-stat__label">Low stock</p></div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="inventory-title">
+          <div class="panel-head">
+            <h3 class="panel-title" id="inventory-title">All products</h3>
+
+            <!-- Filters: search OR category (one at a time, see admin-inventory.js) -->
+            <form class="toolbar" id="inventory-filters" role="search" novalidate>
+              <div class="field toolbar__search">
+                <label class="visually-hidden" for="filter-search">Search products by title</label>
+                <div class="input-wrap">
+                  <span data-icon="search" data-size="18"></span>
+                  <input class="input" id="filter-search" type="search" placeholder="Search by title, e.g. Wire" autocomplete="off" aria-describedby="filter-search-hint">
+                </div>
+                <p class="visually-hidden" id="filter-search-hint">Finds products whose title starts with what you type.</p>
+              </div>
+              <div class="field">
+                <label class="visually-hidden" for="filter-category">Filter by category</label>
+                <select class="input" id="filter-category">
+                  <option value="">All categories</option>
+                </select>
+              </div>
+            </form>
+          </div>
+
+          <p class="result-line" id="result-line" aria-live="polite"></p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption class="visually-hidden">Products, 10 per page</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num">Price</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="hide-lg">Updated</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="inventory-rows"></tbody>
+            </table>
+          </div>
+
+          <div class="panel-foot" id="inventory-pager"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="../js/jquery-fallback.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/ui.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/placeholder.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/admin-inventory.js"></script>
+</body>
+</html>
