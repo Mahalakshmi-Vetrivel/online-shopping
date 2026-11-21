@@ -32,45 +32,78 @@
             <h2 class="page-intro__title">Welcome back</h2>
             <p class="page-intro__text">Here is how ShopNest is doing today.</p>
           </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="refresh-dashboard">
+            <span data-icon="bolt" data-size="16"></span> Refresh numbers
+          </button>
         </div>
 
-        <!-- Stat cards: live numbers arrive in Phase 6 -->
+        <!-- The four key numbers (filled by js/admin-dashboard.js) -->
         <section class="stat-grid" aria-label="Key numbers">
           <article class="stat-card tone-1">
             <span class="stat-card__icon"><span data-icon="box" data-size="22"></span></span>
             <p class="stat-card__label">Total products</p>
-            <p class="stat-card__value"><span class="skeleton"></span></p>
+            <p class="stat-card__value" id="stat-products"><span class="skeleton"></span></p>
+            <p class="stat-card__sub" id="stat-products-sub">&nbsp;</p>
           </article>
           <article class="stat-card tone-5">
             <span class="stat-card__icon"><span data-icon="alert" data-size="22"></span></span>
             <p class="stat-card__label">Low-stock items</p>
-            <p class="stat-card__value"><span class="skeleton"></span></p>
+            <p class="stat-card__value" id="stat-low"><span class="skeleton"></span></p>
+            <p class="stat-card__sub" id="stat-low-sub">&nbsp;</p>
           </article>
           <article class="stat-card tone-9">
             <span class="stat-card__icon"><span data-icon="users" data-size="22"></span></span>
             <p class="stat-card__label">Customers</p>
-            <p class="stat-card__value"><span class="skeleton"></span></p>
+            <p class="stat-card__value" id="stat-customers"><span class="skeleton"></span></p>
+            <p class="stat-card__sub" id="stat-customers-sub">&nbsp;</p>
           </article>
           <article class="stat-card tone-6">
             <span class="stat-card__icon"><span data-icon="wallet" data-size="22"></span></span>
             <p class="stat-card__label">Total sales</p>
-            <p class="stat-card__value"><span class="skeleton"></span></p>
+            <p class="stat-card__value" id="stat-sales"><span class="skeleton"></span></p>
+            <p class="stat-card__sub" id="stat-sales-sub">&nbsp;</p>
           </article>
         </section>
 
-        <section class="panel" aria-labelledby="dashboard-next">
-          <div class="panel-head">
-            <h3 class="panel-title" id="dashboard-next">Admin shell ready</h3>
-            <span class="badge badge-info">Phase 0</span>
-          </div>
-          <div class="panel-body">
-            <div class="empty-state">
-              <div class="empty-state__art"><span data-icon="chart" data-size="40"></span></div>
-              <p class="empty-state__title">Live numbers are on the way</p>
-              <p class="empty-state__text">Inventory (Phase 2), Customers (Phase 3) and Reports (Phase 6) plug into this layout.</p>
+        <div class="dash-grid">
+          <section class="panel" aria-labelledby="dash-week-title">
+            <div class="panel-head">
+              <h3 class="panel-title" id="dash-week-title">Sales, last 7 days</h3>
+              <a class="panel-link" href="reports.html#sales/all">Sales report</a>
             </div>
-          </div>
-        </section>
+            <div class="panel-body" id="dash-week" aria-busy="true"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="dash-pay-title">
+            <div class="panel-head">
+              <h3 class="panel-title" id="dash-pay-title">Cash vs credit (all time)</h3>
+              <a class="panel-link" href="reports.html#customers/top10">Top customers</a>
+            </div>
+            <div class="panel-body" id="dash-pay" aria-busy="true"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="dash-recent-title">
+            <div class="panel-head">
+              <h3 class="panel-title" id="dash-recent-title">Recent orders</h3>
+              <a class="panel-link" href="reports.html#sales/all">All sales</a>
+            </div>
+            <div class="table-wrap" id="dash-recent" aria-busy="true"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="dash-restock-title">
+            <div class="panel-head">
+              <h3 class="panel-title" id="dash-restock-title">Needs restocking</h3>
+              <a class="panel-link" href="reports.html#inventory/low">Low-stock report</a>
+            </div>
+            <div class="panel-body" id="dash-restock" aria-busy="true"></div>
+          </section>
+        </div>
+
+        <nav class="quick-links" aria-label="Shortcuts">
+          <a class="btn btn-primary" href="inventory.html"><span data-icon="plus" data-size="18"></span> Manage products</a>
+          <a class="btn btn-secondary" href="customers.html"><span data-icon="wallet" data-size="18"></span> Customer credit</a>
+          <a class="btn btn-secondary" href="reports.html"><span data-icon="chart" data-size="18"></span> All reports</a>
+        </nav>
       </main>
     </div>
   </div>
@@ -83,5 +116,7 @@
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/layout.js"></script>
+  <script src="../js/reports-calc.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
 </body>
 </html>
