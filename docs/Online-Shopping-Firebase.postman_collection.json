@@ -1,0 +1,1107 @@
+{
+  "info": {
+    "name": "Online Shopping - Firebase REST API",
+    "description": "Backend tests for the Online Shopping assignment (Firestore REST + Firebase Auth REST). Run the folders in order. Variables are under the collection's Variables tab.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "1.1 Sign up (new customer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authUrl}}/accounts:signUp?key={{apiKey}}",
+            "description": "Creates a Firebase Auth user. Saves idToken, refreshToken and uid into collection variables.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"returnSecureToken\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('idToken', r.idToken);",
+                  "pm.collectionVariables.set('refreshToken', r.refreshToken);",
+                  "pm.collectionVariables.set('uid', r.localId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.2 Sign in (customer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authUrl}}/accounts:signInWithPassword?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"returnSecureToken\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('idToken', r.idToken);",
+                  "pm.collectionVariables.set('refreshToken', r.refreshToken);",
+                  "pm.collectionVariables.set('uid', r.localId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.3 Sign in (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authUrl}}/accounts:signInWithPassword?key={{apiKey}}",
+            "description": "Set adminPassword in the collection variables first.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\",\n  \"returnSecureToken\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('idToken', r.idToken);",
+                  "pm.collectionVariables.set('refreshToken', r.refreshToken);",
+                  "pm.collectionVariables.set('uid', r.localId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.4 Get signed-in user (lookup)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authUrl}}/accounts:lookup?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{idToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.5 Refresh ID token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "https://securetoken.googleapis.com/v1/token?key={{apiKey}}",
+            "description": "ID tokens expire after 1 hour. This gets a new one.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refreshToken}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('idToken', r.id_token);",
+                  "pm.collectionVariables.set('refreshToken', r.refresh_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.6 Send password reset email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authUrl}}/accounts:sendOobCode?key={{apiKey}}",
+            "description": "Firebase sends the reset email. Use a real inbox to see it.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestType\": \"PASSWORD_RESET\",\n  \"email\": \"{{customerEmail}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Categories",
+      "item": [
+        {
+          "name": "2.1 List all categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/categories?key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.2 Get one category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/categories/{{categoryId}}?key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.3 Create category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/categories?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"name\": {\n      \"stringValue\": \"Books\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Inventory (Admin)",
+      "item": [
+        {
+          "name": "3.1 Create item (auto ID)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/inventory?key={{apiKey}}",
+            "description": "Admin creates a product. The new document ID is saved as inventoryId.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"catId\": {\n      \"stringValue\": \"{{categoryId}}\"\n    },\n    \"categoryName\": {\n      \"stringValue\": \"Electronics\"\n    },\n    \"title\": {\n      \"stringValue\": \"Wireless Earbuds\"\n    },\n    \"description\": {\n      \"stringValue\": \"Bluetooth 5.3 earbuds with 30 hours of battery\"\n    },\n    \"qty\": {\n      \"integerValue\": \"50\"\n    },\n    \"price\": {\n      \"doubleValue\": 1499.0\n    },\n    \"isActive\": {\n      \"booleanValue\": true\n    },\n    \"createdAt\": {\n      \"timestampValue\": \"2026-11-20T10:00:00Z\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const id = pm.response.json().name.split('/').pop();",
+                  "pm.collectionVariables.set('inventoryId', id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.2 Get one item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/{{inventoryId}}?key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.3 List items, page 1 (pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory?pageSize=5&orderBy=title&key={{apiKey}}",
+            "description": "Returns 5 items and a nextPageToken if more exist."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const t = pm.response.json().nextPageToken || '';",
+                  "pm.collectionVariables.set('pageToken', t);",
+                  "pm.test('nextPageToken saved (empty = last page)', () => true);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.4 List items, next page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory?pageSize=5&orderBy=title&pageToken={{pageToken}}&key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const t = pm.response.json().nextPageToken || '';",
+                  "pm.collectionVariables.set('pageToken', t);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.5 Items by category (runQuery)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "Filter by catId. Change offset (0, 5, 10...) for pages.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"inventory\"\n      }\n    ],\n    \"where\": {\n      \"fieldFilter\": {\n        \"field\": {\n          \"fieldPath\": \"catId\"\n        },\n        \"op\": \"EQUAL\",\n        \"value\": {\n          \"stringValue\": \"{{categoryId}}\"\n        }\n      }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.6 Search items by title prefix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "Firestore has no 'contains' search; this is a prefix search (case-sensitive).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"inventory\"\n      }\n    ],\n    \"where\": {\n      \"compositeFilter\": {\n        \"op\": \"AND\",\n        \"filters\": [\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"title\"\n              },\n              \"op\": \"GREATER_THAN_OR_EQUAL\",\n              \"value\": {\n                \"stringValue\": \"Wire\"\n              }\n            }\n          },\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"title\"\n              },\n              \"op\": \"LESS_THAN_OR_EQUAL\",\n              \"value\": {\n                \"stringValue\": \"Wire\\uf8ff\"\n              }\n            }\n          }\n        ]\n      }\n    },\n    \"limit\": 10\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.7 Update item (all fields except ID)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/inventory/{{inventoryId}}?updateMask.fieldPaths=title&updateMask.fieldPaths=description&updateMask.fieldPaths=qty&updateMask.fieldPaths=price&updateMask.fieldPaths=catId&updateMask.fieldPaths=categoryName&currentDocument.exists=true&key={{apiKey}}",
+            "description": "updateMask = only these fields change. Without it, PATCH replaces the whole document!",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"title\": {\n      \"stringValue\": \"Wireless Earbuds Pro\"\n    },\n    \"description\": {\n      \"stringValue\": \"Noise cancelling, 36 hours battery\"\n    },\n    \"qty\": {\n      \"integerValue\": \"40\"\n    },\n    \"price\": {\n      \"doubleValue\": 1999.0\n    },\n    \"catId\": {\n      \"stringValue\": \"{{categoryId}}\"\n    },\n    \"categoryName\": {\n      \"stringValue\": \"Electronics\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.8 Deactivate item",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/inventory/{{inventoryId}}?updateMask.fieldPaths=isActive&currentDocument.exists=true&key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"isActive\": {\n      \"booleanValue\": false\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.9 Activate item",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/inventory/{{inventoryId}}?updateMask.fieldPaths=isActive&currentDocument.exists=true&key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"isActive\": {\n      \"booleanValue\": true\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.10 Low stock (qty < 15)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"inventory\"\n      }\n    ],\n    \"where\": {\n      \"fieldFilter\": {\n        \"field\": {\n          \"fieldPath\": \"qty\"\n        },\n        \"op\": \"LESS_THAN\",\n        \"value\": {\n          \"integerValue\": \"15\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.11 High stock (qty > 100)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"inventory\"\n      }\n    ],\n    \"where\": {\n      \"fieldFilter\": {\n        \"field\": {\n          \"fieldPath\": \"qty\"\n        },\n        \"op\": \"GREATER_THAN\",\n        \"value\": {\n          \"integerValue\": \"100\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.12 Count all items (aggregation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runAggregationQuery?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredAggregationQuery\": {\n    \"structuredQuery\": {\n      \"from\": [\n        {\n          \"collectionId\": \"inventory\"\n        }\n      ]\n    },\n    \"aggregations\": [\n      {\n        \"alias\": \"total\",\n        \"count\": {}\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.13 Delete item (permanent)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/{{inventoryId}}?key={{apiKey}}",
+            "description": "Run this LAST. In the app this happens only after a Yes/No confirmation."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Customers",
+      "item": [
+        {
+          "name": "4.1 Create customer profile (ID = uid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/customers?documentId={{uid}}&key={{apiKey}}",
+            "description": "Run 1.1 Sign up first so {{uid}} is set. The profile doc ID equals the Auth uid.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"name\": {\n      \"stringValue\": \"Test Customer\"\n    },\n    \"email\": {\n      \"stringValue\": \"{{customerEmail}}\"\n    },\n    \"mobile\": {\n      \"stringValue\": \"9876543210\"\n    },\n    \"creditLimit\": {\n      \"doubleValue\": 1000\n    },\n    \"creditUsed\": {\n      \"doubleValue\": 0\n    },\n    \"createdAt\": {\n      \"timestampValue\": \"2026-11-20T10:00:00Z\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4.2 Get customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/customers/{{uid}}?key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4.3 List customers (pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/customers?pageSize=10&key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4.4 Update credit limit (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/customers/{{uid}}?updateMask.fieldPaths=creditLimit&currentDocument.exists=true&key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fields\": {\n    \"creditLimit\": {\n      \"doubleValue\": 1500\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Orders & Reports",
+      "item": [
+        {
+          "name": "5.1 Place order - CASH (atomic commit)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:commit?key={{apiKey}}",
+            "description": "ONE atomic request: creates the order AND reduces stock. Either both happen or neither.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"writes\": [\n    {\n      \"update\": {\n        \"name\": \"projects/{{projectId}}/databases/(default)/documents/orders/{{orderId}}\",\n        \"fields\": {\n          \"customerId\": {\n            \"stringValue\": \"{{uid}}\"\n          },\n          \"customerName\": {\n            \"stringValue\": \"Test Customer\"\n          },\n          \"customerEmail\": {\n            \"stringValue\": \"{{customerEmail}}\"\n          },\n          \"items\": {\n            \"arrayValue\": {\n              \"values\": [\n                {\n                  \"mapValue\": {\n                    \"fields\": {\n                      \"productId\": {\n                        \"stringValue\": \"{{inventoryId}}\"\n                      },\n                      \"title\": {\n                        \"stringValue\": \"Wireless Earbuds Pro\"\n                      },\n                      \"catId\": {\n                        \"stringValue\": \"{{categoryId}}\"\n                      },\n                      \"categoryName\": {\n                        \"stringValue\": \"Electronics\"\n                      },\n                      \"qty\": {\n                        \"integerValue\": \"2\"\n                      },\n                      \"price\": {\n                        \"doubleValue\": 1999.0\n                      },\n                      \"lineTotal\": {\n                        \"doubleValue\": 3998.0\n                      }\n                    }\n                  }\n                }\n              ]\n            }\n          },\n          \"totalAmount\": {\n            \"doubleValue\": 3998.0\n          },\n          \"paymentType\": {\n            \"stringValue\": \"cash\"\n          },\n          \"status\": {\n            \"stringValue\": \"PLACED\"\n          }\n        }\n      },\n      \"updateTransforms\": [\n        {\n          \"fieldPath\": \"createdAt\",\n          \"setToServerValue\": \"REQUEST_TIME\"\n        }\n      ],\n      \"currentDocument\": {\n        \"exists\": false\n      }\n    },\n    {\n      \"transform\": {\n        \"document\": \"projects/{{projectId}}/databases/(default)/documents/inventory/{{inventoryId}}\",\n        \"fieldTransforms\": [\n          {\n            \"fieldPath\": \"qty\",\n            \"increment\": {\n              \"integerValue\": \"-2\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id = 'ORD' + Date.now();",
+                  "pm.collectionVariables.set('orderId', id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.2 Place order - CREDIT (atomic commit)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:commit?key={{apiKey}}",
+            "description": "Creates the order, reduces stock AND adds to the customer's creditUsed. The app must check available credit (creditLimit - creditUsed) and stock BEFORE calling this.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"writes\": [\n    {\n      \"update\": {\n        \"name\": \"projects/{{projectId}}/databases/(default)/documents/orders/{{orderId}}\",\n        \"fields\": {\n          \"customerId\": {\n            \"stringValue\": \"{{uid}}\"\n          },\n          \"customerName\": {\n            \"stringValue\": \"Test Customer\"\n          },\n          \"customerEmail\": {\n            \"stringValue\": \"{{customerEmail}}\"\n          },\n          \"items\": {\n            \"arrayValue\": {\n              \"values\": [\n                {\n                  \"mapValue\": {\n                    \"fields\": {\n                      \"productId\": {\n                        \"stringValue\": \"{{inventoryId}}\"\n                      },\n                      \"title\": {\n                        \"stringValue\": \"Wireless Earbuds Pro\"\n                      },\n                      \"catId\": {\n                        \"stringValue\": \"{{categoryId}}\"\n                      },\n                      \"categoryName\": {\n                        \"stringValue\": \"Electronics\"\n                      },\n                      \"qty\": {\n                        \"integerValue\": \"1\"\n                      },\n                      \"price\": {\n                        \"doubleValue\": 999.0\n                      },\n                      \"lineTotal\": {\n                        \"doubleValue\": 999.0\n                      }\n                    }\n                  }\n                }\n              ]\n            }\n          },\n          \"totalAmount\": {\n            \"doubleValue\": 999.0\n          },\n          \"paymentType\": {\n            \"stringValue\": \"credit\"\n          },\n          \"status\": {\n            \"stringValue\": \"PLACED\"\n          }\n        }\n      },\n      \"updateTransforms\": [\n        {\n          \"fieldPath\": \"createdAt\",\n          \"setToServerValue\": \"REQUEST_TIME\"\n        }\n      ],\n      \"currentDocument\": {\n        \"exists\": false\n      }\n    },\n    {\n      \"transform\": {\n        \"document\": \"projects/{{projectId}}/databases/(default)/documents/inventory/{{inventoryId}}\",\n        \"fieldTransforms\": [\n          {\n            \"fieldPath\": \"qty\",\n            \"increment\": {\n              \"integerValue\": \"-1\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"transform\": {\n        \"document\": \"projects/{{projectId}}/databases/(default)/documents/customers/{{uid}}\",\n        \"fieldTransforms\": [\n          {\n            \"fieldPath\": \"creditUsed\",\n            \"increment\": {\n              \"doubleValue\": 999.0\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id = 'ORD' + Date.now();",
+                  "pm.collectionVariables.set('orderId', id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.3 Get order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/orders/{{orderId}}?key={{apiKey}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.4 Order history of a customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"orders\"\n      }\n    ],\n    \"where\": {\n      \"fieldFilter\": {\n        \"field\": {\n          \"fieldPath\": \"customerId\"\n        },\n        \"op\": \"EQUAL\",\n        \"value\": {\n          \"stringValue\": \"{{uid}}\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.5 All orders between dates (sales report)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "Uses fromDate / toDate variables (ISO format, e.g. 2026-11-01T00:00:00Z).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"orders\"\n      }\n    ],\n    \"where\": {\n      \"compositeFilter\": {\n        \"op\": \"AND\",\n        \"filters\": [\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"createdAt\"\n              },\n              \"op\": \"GREATER_THAN_OR_EQUAL\",\n              \"value\": {\n                \"timestampValue\": \"{{fromDate}}\"\n              }\n            }\n          },\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"createdAt\"\n              },\n              \"op\": \"LESS_THAN_OR_EQUAL\",\n              \"value\": {\n                \"timestampValue\": \"{{toDate}}\"\n              }\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.6 Cash orders between dates",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}:runQuery?key={{apiKey}}",
+            "description": "Equality + range filter needs a COMPOSITE INDEX. The first time, Firestore returns an error with a link: open it, click Create index, wait ~1 minute, run again.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"structuredQuery\": {\n    \"from\": [\n      {\n        \"collectionId\": \"orders\"\n      }\n    ],\n    \"where\": {\n      \"compositeFilter\": {\n        \"op\": \"AND\",\n        \"filters\": [\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"paymentType\"\n              },\n              \"op\": \"EQUAL\",\n              \"value\": {\n                \"stringValue\": \"cash\"\n              }\n            }\n          },\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"createdAt\"\n              },\n              \"op\": \"GREATER_THAN_OR_EQUAL\",\n              \"value\": {\n                \"timestampValue\": \"{{fromDate}}\"\n              }\n            }\n          },\n          {\n            \"fieldFilter\": {\n              \"field\": {\n                \"fieldPath\": \"createdAt\"\n              },\n              \"op\": \"LESS_THAN_OR_EQUAL\",\n              \"value\": {\n                \"timestampValue\": \"{{toDate}}\"\n              }\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "projectId",
+      "value": "online-shopping-b3e8d"
+    },
+    {
+      "key": "apiKey",
+      "value": "AIzaSyCu498WCp0_BU35xVTX1MauBcZkSR-ENhw"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://firestore.googleapis.com/v1/projects/{{projectId}}/databases/(default)/documents"
+    },
+    {
+      "key": "authUrl",
+      "value": "https://identitytoolkit.googleapis.com/v1"
+    },
+    {
+      "key": "adminEmail",
+      "value": "mahalakshmivsm7@gmail.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": ""
+    },
+    {
+      "key": "customerEmail",
+      "value": "testcustomer1@example.com"
+    },
+    {
+      "key": "customerPassword",
+      "value": ""
+    },
+    {
+      "key": "categoryId",
+      "value": "9XmP9q82viUiwyLI4WN1"
+    },
+    {
+      "key": "inventoryId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "pageToken",
+      "value": ""
+    },
+    {
+      "key": "idToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "uid",
+      "value": ""
+    },
+    {
+      "key": "fromDate",
+      "value": "2026-11-01T00:00:00Z"
+    },
+    {
+      "key": "toDate",
+      "value": "2026-12-31T23:59:59Z"
+    }
+  ]
+}
