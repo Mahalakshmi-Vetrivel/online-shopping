@@ -19,7 +19,6 @@
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <div class="admin-layout">
-    <!-- Sidebar and top bar are filled by js/layout.js -->
     <aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin sidebar"></aside>
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -30,17 +29,61 @@
         <div class="page-intro">
           <div>
             <h2 class="page-intro__title">Reports</h2>
-            <p class="page-intro__text">This page is protected: only the admin can open it.</p>
+            <p class="page-intro__text">Customers, inventory and sales. Pick a report, choose the dates, and download it if you need it.</p>
           </div>
         </div>
-        <section class="panel" aria-label="Reports">
-          <div class="panel-body">
-            <div class="empty-state">
-              <div class="empty-state__art"><span data-icon="chart" data-size="40"></span></div>
-              <p class="empty-state__title">Reports arrive in Phase 6</p>
-              <p class="empty-state__text">Customer, inventory and sales reports with date filters and top / bottom 10 lists.</p>
-            </div>
+
+        <!-- Three groups of reports (tabs). Arrow keys move between them. -->
+        <div class="report-tabs" role="tablist" aria-label="Report groups" id="report-tabs">
+          <button type="button" class="report-tab" role="tab" id="tab-customers" data-group="customers" aria-selected="true" aria-controls="report-panel">
+            <span data-icon="users" data-size="18"></span> Customers
+          </button>
+          <button type="button" class="report-tab" role="tab" id="tab-inventory" data-group="inventory" aria-selected="false" aria-controls="report-panel" tabindex="-1">
+            <span data-icon="box" data-size="18"></span> Inventory
+          </button>
+          <button type="button" class="report-tab" role="tab" id="tab-sales" data-group="sales" aria-selected="false" aria-controls="report-panel" tabindex="-1">
+            <span data-icon="chart" data-size="18"></span> Sales
+          </button>
+        </div>
+
+        <section class="panel report-panel" id="report-panel" role="tabpanel" aria-labelledby="tab-customers">
+          <!-- Which report of this group (built by js/admin-reports.js) -->
+          <div class="panel-head">
+            <div class="chip-row" id="report-types" role="group" aria-label="Choose a report"></div>
+            <button type="button" class="btn btn-secondary btn-sm" id="download-csv" disabled>
+              <span data-icon="receipt" data-size="16"></span> Download CSV
+            </button>
           </div>
+
+          <form class="report-filters" id="report-filters" novalidate>
+            <!-- From / To dates (hidden for reports that always show today's data) -->
+            <div class="report-filters__dates" id="date-filters">
+              <div class="field">
+                <label class="field-label" for="rf-from">From date</label>
+                <input class="input" id="rf-from" type="date" required aria-describedby="rf-from-error">
+                <p class="field-error" id="rf-from-error"></p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="rf-to">To date</label>
+                <input class="input" id="rf-to" type="date" required aria-describedby="rf-to-error">
+                <p class="field-error" id="rf-to-error"></p>
+              </div>
+              <div class="chip-row report-presets" role="group" aria-label="Quick date ranges">
+                <button type="button" class="chip" data-preset="today">Today</button>
+                <button type="button" class="chip" data-preset="7d">Last 7 days</button>
+                <button type="button" class="chip" data-preset="30d">Last 30 days</button>
+                <button type="button" class="chip" data-preset="month">This month</button>
+                <button type="button" class="chip" data-preset="all">All time</button>
+              </div>
+            </div>
+
+            <div class="field" id="category-filter" hidden>
+              <label class="field-label" for="rf-category">Category</label>
+              <select class="input" id="rf-category"><option value="">All categories</option></select>
+            </div>
+          </form>
+
+          <div class="panel-body report-output" id="report-output" aria-live="polite" aria-busy="true"></div>
         </section>
       </main>
     </div>
@@ -54,5 +97,8 @@
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/layout.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/reports-calc.js"></script>
+  <script src="../js/admin-reports.js"></script>
 </body>
 </html>

@@ -465,6 +465,251 @@
   color: var(--color-text);
 }
 
+/* =========================== REPORTS =========================== */
+.report-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.report-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.7rem 1.25rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-soft);
+  transition: all var(--dur) var(--ease-out);
+}
+
+.report-tab:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.report-tab[aria-selected="true"] {
+  border-color: transparent;
+  background: var(--gradient-button);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-glow);
+}
+
+.report-panel {
+  margin-top: 0;
+}
+
+.report-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4) var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.report-filters__dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.report-filters__dates[hidden],
+.report-filters .field[hidden] {
+  display: none;
+}
+
+.report-presets {
+  align-self: flex-end;
+  padding-bottom: 0.15rem;
+}
+
+.report-presets .chip {
+  min-height: 36px;
+  padding: 0.3rem 0.9rem;
+  font-size: var(--fs-xs);
+}
+
+.report-output {
+  min-height: 240px;
+}
+
+.report-head__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+
+.report-head__sub {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+/* Summary numbers above the chart and table. */
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-5) 0 0;
+}
+
+.report-stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.report-stat dt {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.report-stat dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+.report-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-8);
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.report-rowcount {
+  padding-inline: 0;
+  margin-top: var(--space-6);
+}
+
+#report-table {
+  margin-top: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.report-table tfoot th,
+.report-table tfoot td {
+  border-top: 2px solid var(--color-text);
+  background: var(--color-surface-alt);
+  font-weight: var(--fw-bold);
+}
+
+.report-foot {
+  margin-top: var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.report-loading .report-summary {
+  margin-top: 0;
+}
+
+/* =========================== DASHBOARD =========================== */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.dash-grid .panel {
+  min-width: 0; /* a wide table inside must scroll in its own box, not stretch the page */
+  margin-top: 0;
+}
+
+.stat-card__sub {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.restock-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.restock-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.restock-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.restock-list__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--fw-semibold);
+}
+
+.restock-list__cat {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-regular);
+  color: var(--color-text-muted);
+}
+
+.dash-grid .data-table th,
+.dash-grid .data-table td {
+  padding: var(--space-3) var(--space-3);
+}
+
+.panel-link {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+@media (max-width: 1100px) {
+  .dash-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .report-filters {
+    padding: var(--space-4);
+  }
+
+  .report-charts {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+}
+
 /* =========================== RESPONSIVE =========================== */
 /* The "Updated" column is the least important: hide it on narrower screens. */
 @media (max-width: 1360px) {
