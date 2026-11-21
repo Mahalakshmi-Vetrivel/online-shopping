@@ -1,0 +1,59 @@
+// =====================================================================
+//  Firestore security rules for ShopNest  (simple version, for an assignment)
+//
+//  HOW TO USE:  Firebase console -> Build -> Firestore Database -> Rules
+//               -> delete what is there -> paste this whole file -> Publish.
+//
+//  Why this is needed: "test mode" (open to everyone) expires about 20 Dec 2026.
+//  These rules never expire.
+//
+//  The idea in one line:
+//    visitors may READ the shop catalogue; changing anything needs a signed-in user;
+//    only the admin e-mail may add / delete products or change categories.
+//
+//  NOTE: this is deliberately simple. A real shop would also check, for example,
+//  that a customer can only read their OWN orders and can only lower stock by the
+//  quantity they bought.
+// =====================================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // true when the request carries a valid sign-in token (the idToken api.js sends)
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // true only for the one admin e-mail (same address as ADMIN_EMAIL in js/config.js)
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == 'mahalakshmivsm7@gmail.com';
+    }
+
+    // Categories: everyone can read, only the admin can change.
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Products: everyone can read (the store is public).
+    //  - create / delete: admin only
+    //  - update: any signed-in user, because buying a product lowers its stock
+    match /inventory/{productId} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+      allow update: if signedIn();
+    }
+
+    // Customer profiles (name, credit limit, credit used): signed-in users only.
+    match /customers/{customerId} {
+      allow read, write: if signedIn();
+    }
+
+    // Orders: signed-in users only.
+    match /orders/{orderId} {
+      allow read, write: if signedIn();
+    }
+  }
+}
