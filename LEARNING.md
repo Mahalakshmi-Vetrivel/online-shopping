@@ -271,8 +271,58 @@ New sections are added at the end of every phase.
 
 ---
 
+## Phase 4: The store catalogue
+
+### 38. Why the store loads all active products once
+- `Api.getActiveProducts()` sends **one** `runQuery` with `isActive == true` and keeps the result
+  (the Promise is cached, like the categories). The trending row, hero numbers, chips, catalogue and
+  "more in this category" all use that one answer. The test checks that exactly 1 request is made.
+- Filtering, searching, sorting and paging then happen in **JavaScript** (`Array.filter`, `sort`, `slice`).
+- **Trade-off:** perfect for a catalogue of a few hundred products, and it needs no extra Firestore index
+  (an equality filter alone is fine). A shop with 100,000 products would page on the server instead,
+  which is exactly what the admin Inventory page does (concept 28).
+
+### 39. "Contains" search in the browser
+- Firestore can only do "starts with" (concept 29), but once the products are in JavaScript we can do better:
+  `haystack.includes(word)` for **every word** typed, over the title, category and description, ignoring case.
+  `"wireless pro"` finds *Wireless Earbuds Pro*, and `"bluetooth"` also finds the speaker through its description.
+- **Debounce** (concept from Phase 2): results update 350 ms after the last key press, not on every letter.
+
+### 40. State in the address bar
+- The catalogue's choices live in the URL: `index.html?cat=<id>&q=wire&sort=price-asc&page=2`.
+- `URLSearchParams` reads and builds the query string, and `history.replaceState()` updates the address
+  **without reloading** the page. So a filtered view can be bookmarked or shared, and category links
+  from the home page open the right view.
+- `readUrl()` also repairs bad values: an unknown `cat` is ignored, and `?page=99` becomes the last page.
+
+### 41. Pagination in memory
+- `list.slice(from, from + PAGE_SIZE)` gives one page; `Math.ceil(list.length / PAGE_SIZE)` gives the page count.
+- Sold-out products are moved to the end with a second `sort`. `Array.sort` is **stable** (equal items keep
+  their order), so the chosen sort (e.g. cheapest first) is kept inside each group.
+
+### 42. The "stretched link" card
+- Each product card has ONE link (the title). Its `::after` pseudo-element is `position: absolute; inset: 0`,
+  so it covers the whole card and the whole card is clickable.
+- A keyboard or screen-reader user meets one clear link instead of three (photo, title, price). The "Add"
+  button has `z-index: 2`, so it stays above the link and works on its own.
+- `:has(.product-card__link:focus-visible)` draws the focus ring around the whole card.
+
+### 43. Customers only see active products, and fresh data on the details page
+- The catalogue asks Firestore only for `isActive == true`, so a deactivated product vanishes from the store
+  after a reload (tested: 59 products while one is hidden).
+- The product page reads the single product **fresh** (`GET /inventory/{id}`), so stock is up to date, and then
+  checks `isActive` itself: a hidden product shows "This product is not available", a deleted or unknown id
+  shows "Product not found". Showing a friendly message for every bad case is part of good error handling.
+
+### 44. Small UI details
+- **Clamping** the quantity: `Math.min(Math.max(value, 1), stock)` keeps it a whole number from 1 to the stock;
+  letters are removed with `value.replace(/\D/g, '')`.
+- `scroll-margin-top` stops a link like `#products` from hiding its heading behind the sticky header.
+- `loading="lazy"` for photos far down the page, `loading="eager"` for the main photo at the top.
+
+---
+
 ## Coming in later phases
-- Debounce for search (Phase 4)
 - Atomic commit, field transforms (increment) and server timestamps (Phase 5)
 - Preconditions (updateTime) to prevent overselling (Phase 5)
 - Composite indexes (Phase 4 / 6)

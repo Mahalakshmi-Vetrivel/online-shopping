@@ -4,7 +4,7 @@ A colourful, responsive online store built with **HTML, CSS, JavaScript and jQue
 The browser talks to **Firebase** (Firestore database + Authentication) through its REST APIs,
 using **JSON over AJAX** (`$.ajax`).
 
-> Psiog IMPACT training assignment. Status: **Phase 3 (admin customers) complete.** See [PLAN.md](PLAN.md).
+> Psiog IMPACT training assignment. Status: **Phase 4 (store catalogue) complete.** See [PLAN.md](PLAN.md).
 
 ## Run it locally
 
@@ -25,7 +25,8 @@ Then open <http://localhost:5500>.
 
 | URL | Who can open it | What it shows |
 |-----|-----------------|---------------|
-| `/index.html` | everyone | Store home: hero, categories, trending products |
+| `/index.html` | everyone | Store home: hero, categories, trending, and the catalogue (category chips, live search, sort, pagination) |
+| `/product.html?id=...` | everyone | Product details: photo, price, stock, quantity, related products (active products only) |
 | `/login.html` | signed-out visitors | Sign in |
 | `/signup.html` | signed-out visitors | Create account (+ customer profile with starter credit) |
 | `/reset-password.html` | everyone | Send a password-reset e-mail |

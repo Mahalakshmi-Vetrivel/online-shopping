@@ -1,6 +1,6 @@
 # PLAN.md: ShopNest Online Shopping (Psiog IMPACT training assignment)
 
-> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done.
+> Status: **APPROVED on 21 Nov 2026** (admin email confirmed, all defaults accepted). Phase 0 done. Phase 1 done. Phase 2 done. Phase 3 done. Phase 4 done.
 > Sources read: the trainer's OneNote notes (json.pdf), the project brief,
 > `Docs/Online-Shopping-Firebase.postman_collection.json` (32 requests) and `Docs/seed-shop.ps1`.
 
@@ -140,6 +140,10 @@ payment type). Simple CSS bar charts show the totals.
 - **Store layout:** announcement bar, header with a large search box, account/orders/cart actions, a live category bar,
   a bento hero with photos, photo category circles, "Trending now" product cards, and a credit banner.
 
+**Phase 4 decision (store paging):** the store loads all active products in one request and filters, searches,
+sorts and pages them in JavaScript. This allows "contains" search and sorting by price without any new
+Firestore index. The admin pages still use server-side `pageToken` and offset paging.
+
 ## 4. Assumptions and open questions
 
 Defaults are shown in **bold**. I'll use them unless you tell me otherwise.
@@ -200,6 +204,8 @@ online-shopping/
 │   ├── ui.js               toast, confirm modal, form modal, loader/skeleton, pagination, debounce, money/date formatting
 │   ├── validation.js       Reusable field validators + inline error messages
 │   ├── placeholder.js      Category colour + SVG icon + initials → product image placeholder
+│   ├── product-card.js     Product card HTML + stock wording (shared by home and product page)
+│   ├── product.js          Product details page
 │   ├── store.js            index.html + product.html logic
 │   ├── cart.js             Cart state (localStorage) + drawer
 │   ├── checkout.js         Stock/credit re-check + atomic commit
