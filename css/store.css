@@ -804,6 +804,34 @@ button.header-action:hover {
   color: var(--color-dark-text);
 }
 
+/* When a link scrolls to a section (#products, #categories ...), stop a little
+   below the sticky header + category bar instead of hiding the heading behind them. */
+.section[id] {
+  scroll-margin-top: calc(var(--header-h) + 3.5rem);
+}
+
+/* =========================== CATALOGUE TOOLBAR =========================== */
+.catalogue-sort {
+  min-width: 220px;
+}
+
+.catalogue-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 40px;
+  margin-block: var(--space-4) var(--space-5);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* The empty state spans the whole grid. */
+.product-grid__empty {
+  grid-column: 1 / -1;
+}
+
 /* =========================== TEST BENCH (Phase 0 only, removed in Phase 7) =========================== */
 .bench-grid {
   display: grid;
