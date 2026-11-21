@@ -187,7 +187,7 @@
       </div>
     </section>
 
-    <!-- ============ FULL CATALOGUE (Phase 4) ============ -->
+    <!-- ============ CATALOGUE: filters, search, sort, pagination ============ -->
     <section class="section" id="products" aria-labelledby="products-title">
       <div class="container">
         <div class="section-head">
@@ -195,8 +195,29 @@
             <p class="eyebrow">Catalogue</p>
             <h2 class="section-title" id="products-title">All products</h2>
           </div>
+          <div class="field catalogue-sort">
+            <label class="field-label" for="sort-select">Sort by</label>
+            <select class="input" id="sort-select">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name">Name: A to Z</option>
+            </select>
+          </div>
         </div>
-        <div id="product-area"></div>
+
+        <!-- Category chips (built by js/store.js) -->
+        <div class="chip-row chip-row--scroll" id="category-chips" role="group" aria-label="Filter by category"></div>
+
+        <div class="catalogue-meta">
+          <p id="catalogue-meta-text" aria-live="polite"></p>
+          <button type="button" class="btn btn-ghost btn-sm" id="clear-filters" hidden>
+            <span data-icon="close" data-size="14"></span> Clear filters
+          </button>
+        </div>
+
+        <div class="product-grid" id="product-grid" aria-busy="true"></div>
+        <div id="product-pager"></div>
       </div>
     </section>
   </main>
@@ -214,6 +235,7 @@
   <script src="js/auth.js"></script>
   <script src="js/placeholder.js"></script>
   <script src="js/layout.js"></script>
+  <script src="js/product-card.js"></script>
   <script src="js/store.js"></script>
 </body>
 </html>
